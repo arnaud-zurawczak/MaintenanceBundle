@@ -9,9 +9,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
- * Create an unlock action
+ * Create an unlock action.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DriverUnlockCommand extends Command
@@ -35,12 +34,13 @@ class DriverUnlockCommand extends Command
         $this
             ->setName('lexik:maintenance:unlock')
             ->setDescription('Unlock access to the site while maintenance...')
-            ->setHelp(<<<EOT
+            ->setHelp(
+                <<<EOT
     You can execute the unlock without a warning message which you need to interact with:
 
     <info>%command.full_name% --no-interaction</info>
 EOT
-                );
+            );
     }
 
     /**
@@ -60,8 +60,6 @@ EOT
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
      * @return bool
      */
     protected function confirmUnlock(InputInterface $input, OutputInterface $output)
@@ -72,11 +70,11 @@ EOT
             $confirmation = true;
         } else {
             // confirm
-            $output->writeln(array(
+            $output->writeln([
                 '',
                 $formatter->formatBlock('You are about to unlock your server.', 'bg=green;fg=white', true),
                 '',
-            ));
+            ]);
 
             $confirmation = $this->askConfirmation(
                 'WARNING! Are you sure you wish to continue? (y/n) ',
@@ -97,14 +95,14 @@ EOT
      * but use the ConfirmationQuestion when available.
      *
      * @param $question
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     *
      * @return mixed
      */
-    protected function askConfirmation($question, InputInterface $input, OutputInterface $output) {
+    protected function askConfirmation($question, InputInterface $input, OutputInterface $output)
+    {
         if (!$this->getHelperSet()->has('question')) {
             return $this->getHelper('dialog')
-                ->askConfirmation($output, '<question>' . $question . '</question>', 'y');
+                ->askConfirmation($output, '<question>'.$question.'</question>', 'y');
         }
 
         return $this->getHelper('question')

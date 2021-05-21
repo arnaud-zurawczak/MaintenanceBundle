@@ -5,14 +5,13 @@ namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Test driver factory
+ * Test driver factory.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DriverFactoryTest extends \PHPUnit\Framework\TestCase
@@ -22,9 +21,9 @@ class DriverFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function setUp(): void
     {
-        $driverOptions = array(
+        $driverOptions = [
             'class' => FileDriver::class,
-            'options' => array('file_path' => sys_get_temp_dir().'/lock'));
+            'options' => ['file_path' => sys_get_temp_dir().'/lock'], ];
 
         $this->container = $this->initContainer();
 
@@ -46,12 +45,12 @@ class DriverFactoryTest extends \PHPUnit\Framework\TestCase
     public function testExceptionConstructor()
     {
         $this->expectException(\ErrorException::class);
-        new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), array());
+        new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), []);
     }
 
     public function testWithDatabaseChoice()
     {
-        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+        $driverOptions = ['class' => DriverFactory::DATABASE_DRIVER, 'options' => null];
 
         $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $driverOptions);
 
@@ -62,7 +61,7 @@ class DriverFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testExceptionGetDriver()
     {
-        $driverOptions = array('class' => '\Unknown', 'options' => null);
+        $driverOptions = ['class' => '\Unknown', 'options' => null];
 
         $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $factory);
@@ -73,14 +72,14 @@ class DriverFactoryTest extends \PHPUnit\Framework\TestCase
 
     protected function initContainer()
     {
-        return new ContainerBuilder(new ParameterBag(array(
-            'kernel.debug'          => false,
-            'kernel.bundles'        => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
-            'kernel.cache_dir'      => sys_get_temp_dir(),
-            'kernel.environment'    => 'dev',
-            'kernel.root_dir'       => __DIR__.'/../../../../', // src dir
+        return new ContainerBuilder(new ParameterBag([
+            'kernel.debug' => false,
+            'kernel.bundles' => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
+            'kernel.cache_dir' => sys_get_temp_dir(),
+            'kernel.environment' => 'dev',
+            'kernel.root_dir' => __DIR__.'/../../../../', // src dir
             'kernel.default_locale' => 'fr',
-        )));
+        ]));
     }
 
     protected function getDatabaseDriver()

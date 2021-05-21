@@ -5,9 +5,8 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Factory for create driver
+ * Factory for create driver.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DriverFactory
@@ -30,18 +29,19 @@ class DriverFactory
     const DATABASE_DRIVER = 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver';
 
     /**
-     * Constructor driver factory
+     * Constructor driver factory.
      *
-     * @param DatabaseDriver      $dbDriver The databaseDriver Service
-     * @param TranslatorInterface $translator The translator service
+     * @param DatabaseDriver      $dbDriver      The databaseDriver Service
+     * @param TranslatorInterface $translator    The translator service
      * @param array               $driverOptions Options driver
+     *
      * @throws \ErrorException
      */
     public function __construct(DatabaseDriver $dbDriver, TranslatorInterface $translator, array $driverOptions)
     {
         $this->driverOptions = $driverOptions;
 
-        if ( ! isset($this->driverOptions['class'])) {
+        if (!isset($this->driverOptions['class'])) {
             throw new \ErrorException('You need to define a driver class');
         }
 
@@ -50,9 +50,10 @@ class DriverFactory
     }
 
     /**
-     * Return the driver
+     * Return the driver.
      *
      * @return mixed
+     *
      * @throws \ErrorException
      */
     public function getDriver()
@@ -63,7 +64,7 @@ class DriverFactory
             throw new \ErrorException("Class '".$class."' not found in ".get_class($this));
         }
 
-        if ($class === self::DATABASE_DRIVER) {
+        if (self::DATABASE_DRIVER === $class) {
             $driver = $this->dbDriver;
             $driver->setOptions($this->driverOptions['options']);
         } else {

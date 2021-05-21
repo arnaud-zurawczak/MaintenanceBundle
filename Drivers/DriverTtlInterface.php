@@ -3,29 +3,28 @@
 namespace Lexik\Bundle\MaintenanceBundle\Drivers;
 
 /**
- * Interface DriverTtlInterface
+ * Interface DriverTtlInterface.
  *
- * @package Lexik\Bundle\MaintenanceBundle\Drivers
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 interface DriverTtlInterface
 {
     /**
-     * Set time to life for overwrite basic configuration
+     * Set time to life for overwrite basic configuration.
      *
-     * @param integer $value ttl value
+     * @param int $value ttl value
      */
     public function setTtl($value);
 
     /**
-     * Return time to life
+     * Return time to life.
      *
-     * @return integer
+     * @return int
      */
     public function getTtl();
 
     /**
-     * Has ttl
+     * Has ttl.
      *
      * @return bool
      */

@@ -4,40 +4,39 @@ namespace Lexik\Bundle\MaintenanceBundle\Listener;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\HttpFoundation\IpUtils;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
- * Listener to decide if user can access to the site
+ * Listener to decide if user can access to the site.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class MaintenanceListener
 {
     /**
-     * Service driver factory
+     * Service driver factory.
      *
      * @var DriverFactory
      */
     protected $driverFactory;
 
     /**
-     * Authorized data
+     * Authorized data.
      *
      * @var array
      */
     protected $authorizedIps;
 
     /**
-     * @var null|String
+     * @var string|null
      */
     protected $path;
 
     /**
-     * @var null|String
+     * @var string|null
      */
     protected $host;
 
@@ -57,7 +56,7 @@ class MaintenanceListener
     protected $cookie;
 
     /**
-     * @var null|String
+     * @var string|null
      */
     protected $route;
 
@@ -67,17 +66,17 @@ class MaintenanceListener
     protected $attributes;
 
     /**
-     * @var Int|null
+     * @var int|null
      */
     protected $http_code;
 
     /**
-     * @var null|String
+     * @var string|null
      */
     protected $http_status;
 
     /**
-     * @var null|String
+     * @var string|null
      */
     protected $http_exception_message;
 
@@ -92,7 +91,7 @@ class MaintenanceListener
     protected $debug;
 
     /**
-     * Constructor Listener
+     * Constructor Listener.
      *
      * Accepts a driver factory, and several arguments to be compared against the
      * incoming request.
@@ -100,28 +99,28 @@ class MaintenanceListener
      * it if at least one of the provided arguments is not empty and matches the
      *  incoming request.
      *
-     * @param DriverFactory $driverFactory The driver factory
-     * @param String $path A regex for the path
-     * @param String $host A regex for the host
-     * @param array $ips The list of IP addresses
-     * @param array $query Query arguments
-     * @param array $cookie Cookies
-     * @param String $route Route name
-     * @param array $attributes Attributes
-     * @param Int $http_code http status code for response
-     * @param String $http_status http status message for response
-     * @param null $http_exception_message http response page exception message
-     * @param bool $debug
+     * @param DriverFactory $driverFactory          The driver factory
+     * @param string        $path                   A regex for the path
+     * @param string        $host                   A regex for the host
+     * @param array         $ips                    The list of IP addresses
+     * @param array         $query                  Query arguments
+     * @param array         $cookie                 Cookies
+     * @param string        $route                  Route name
+     * @param array         $attributes             Attributes
+     * @param int           $http_code              http status code for response
+     * @param string        $http_status            http status message for response
+     * @param null          $http_exception_message http response page exception message
+     * @param bool          $debug
      */
     public function __construct(
         DriverFactory $driverFactory,
         $path = null,
         $host = null,
         $ips = null,
-        $query = array(),
-        $cookie = array(),
+        $query = [],
+        $cookie = [],
         $route = null,
-        $attributes = array(),
+        $attributes = [],
         $http_code = null,
         $http_status = null,
         $http_exception_message = null,
@@ -142,15 +141,13 @@ class MaintenanceListener
     }
 
     /**
-     * @param RequestEvent $event
-     *
      * @return void
      *
      * @throws ServiceUnavailableException
      */
     public function onKernelRequest(RequestEvent $event)
     {
-        if(!$event->isMasterRequest()){
+        if (!$event->isMasterRequest()) {
             return;
         }
 
@@ -188,12 +185,12 @@ class MaintenanceListener
             return;
         }
 
-        if (count((array) $this->ips) !== 0 && $this->checkIps($request->getClientIp(), $this->ips)) {
+        if (0 !== count((array) $this->ips) && $this->checkIps($request->getClientIp(), $this->ips)) {
             return;
         }
 
         $route = $request->get('_route');
-        if (null !== $this->route && preg_match('{'.$this->route.'}', $route)  || (true === $this->debug && '_' === $route[0])) {
+        if (null !== $this->route && preg_match('{'.$this->route.'}', $route) || (true === $this->debug && '_' === $route[0])) {
             return;
         }
 
@@ -207,14 +204,13 @@ class MaintenanceListener
     }
 
     /**
-     * Rewrites the http code of the response
+     * Rewrites the http code of the response.
      *
-     * @param ResponseEvent $event
      * @return void
      */
     public function onKernelResponse(ResponseEvent $event)
     {
-        if ($this->handleResponse && $this->http_code !== null) {
+        if ($this->handleResponse && null !== $this->http_code) {
             $response = $event->getResponse();
             $response->setStatusCode($this->http_code, $this->http_status);
         }
@@ -225,7 +221,8 @@ class MaintenanceListener
      *
      * @param string       $requestedIp
      * @param string|array $ips
-     * @return boolean
+     *
+     * @return bool
      */
     protected function checkIps($requestedIp, $ips)
     {
@@ -234,9 +231,9 @@ class MaintenanceListener
         $valid = false;
         $i = 0;
 
-        while ($i<count($ips) && !$valid) {
+        while ($i < count($ips) && !$valid) {
             $valid = IpUtils::checkIp($requestedIp, $ips[$i]);
-            $i++;
+            ++$i;
         }
 
         return $valid;

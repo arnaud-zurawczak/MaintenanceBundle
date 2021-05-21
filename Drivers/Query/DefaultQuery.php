@@ -5,9 +5,8 @@ namespace Lexik\Bundle\MaintenanceBundle\Drivers\Query;
 use Doctrine\ORM\EntityManager;
 
 /**
- * Default Class for handle database with a doctrine connection
+ * Default Class for handle database with a doctrine connection.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DefaultQuery extends PdoQuery
@@ -17,7 +16,7 @@ class DefaultQuery extends PdoQuery
      */
     protected $em;
 
-    const NAME_TABLE   = 'lexik_maintenance';
+    const NAME_TABLE = 'lexik_maintenance';
 
     /**
      * @param EntityManager $em Entity Manager
@@ -46,7 +45,7 @@ class DefaultQuery extends PdoQuery
      */
     public function createTableQuery()
     {
-        $type = $this->em->getConnection()->getDatabasePlatform()->getName() != 'mysql' ? 'timestamp' : 'datetime';
+        $type = 'mysql' != $this->em->getConnection()->getDatabasePlatform()->getName() ? 'timestamp' : 'datetime';
 
         $this->db->exec(
             sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL)', self::NAME_TABLE, $type)
@@ -75,9 +74,12 @@ class DefaultQuery extends PdoQuery
     public function insertQuery($ttl, $db)
     {
         return $this->exec(
-            $db, sprintf('INSERT INTO %s (ttl) VALUES (:ttl)',
-            self::NAME_TABLE),
-            array(':ttl' => $ttl)
+            $db,
+            sprintf(
+                'INSERT INTO %s (ttl) VALUES (:ttl)',
+                self::NAME_TABLE
+            ),
+            [':ttl' => $ttl]
         );
     }
 }

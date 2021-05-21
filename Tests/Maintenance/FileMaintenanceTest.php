@@ -9,14 +9,13 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Test driver file
+ * Test driver file.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class FileMaintenanceTest extends TestCase
 {
-    static protected $tmpDir;
+    protected static $tmpDir;
     protected $container;
 
     public static function setUpBeforeClass(): void
@@ -38,14 +37,14 @@ class FileMaintenanceTest extends TestCase
 
     public function testDecide()
     {
-        $options = array('file_path' => self::$tmpDir.'/lock.lock');
+        $options = ['file_path' => self::$tmpDir.'/lock.lock'];
 
         $fileM = new FileDriver($options);
         $fileM->setTranslator($this->getTranslator());
 
         $this->assertTrue($fileM->decide());
 
-        $options = array('file_path' => self::$tmpDir.'/clok');
+        $options = ['file_path' => self::$tmpDir.'/clok'];
 
         $fileM2 = new FileDriver($options);
         $fileM2->setTranslator($this->getTranslator());
@@ -55,13 +54,13 @@ class FileMaintenanceTest extends TestCase
     public function testExceptionInvalidPath()
     {
         $this->expectException(\InvalidArgumentException::class);
-        $fileM = new FileDriver(array());
+        $fileM = new FileDriver([]);
         $fileM->setTranslator($this->getTranslator());
     }
 
     public function testLock()
     {
-        $options = array('file_path' => self::$tmpDir.'/lock.lock');
+        $options = ['file_path' => self::$tmpDir.'/lock.lock'];
 
         $fileM = new FileDriver($options);
         $fileM->setTranslator($this->getTranslator());
@@ -72,7 +71,7 @@ class FileMaintenanceTest extends TestCase
 
     public function testUnlock()
     {
-        $options = array('file_path' => self::$tmpDir.'/lock.lock');
+        $options = ['file_path' => self::$tmpDir.'/lock.lock'];
 
         $fileM = new FileDriver($options);
         $fileM->setTranslator($this->getTranslator());
@@ -89,7 +88,7 @@ class FileMaintenanceTest extends TestCase
 
     public function testIsExists()
     {
-        $options = array('file_path' => self::$tmpDir.'/lock.lock', 'ttl' => 3600);
+        $options = ['file_path' => self::$tmpDir.'/lock.lock', 'ttl' => 3600];
 
         $fileM = new FileDriver($options);
         $fileM->setTranslator($this->getTranslator());
@@ -115,7 +114,7 @@ class FileMaintenanceTest extends TestCase
         $this->assertEquals('lexik_maintenance.not_success_unlock', $fileM->getMessageUnlock(false));
     }
 
-    static public function tearDownAfterClass(): void
+    public static function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
     }
@@ -123,11 +122,11 @@ class FileMaintenanceTest extends TestCase
     protected function initContainer()
     {
         return new ContainerBuilder(new ParameterBag([
-            'kernel.debug'          => false,
-            'kernel.bundles'        => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
-            'kernel.cache_dir'      => sys_get_temp_dir(),
-            'kernel.environment'    => 'dev',
-            'kernel.root_dir'       => __DIR__.'/../../../../', // src dir
+            'kernel.debug' => false,
+            'kernel.bundles' => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
+            'kernel.cache_dir' => sys_get_temp_dir(),
+            'kernel.environment' => 'dev',
+            'kernel.root_dir' => __DIR__.'/../../../../', // src dir
             'kernel.default_locale' => 'fr',
         ]));
     }

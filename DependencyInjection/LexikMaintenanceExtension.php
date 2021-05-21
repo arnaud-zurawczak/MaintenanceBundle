@@ -2,18 +2,17 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\HttpKernel\DependencyInjection\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Exception\InvalidArgumentException;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 /**
- * This is the class that loads and manages your bundle configuration
+ * This is the class that loads and manages your bundle configuration.
  *
  * To learn more see {@link http://symfony.com/doc/current/cookbook/bundles/extension.html}
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class LexikMaintenanceExtension extends Extension
@@ -53,7 +52,7 @@ class LexikMaintenanceExtension extends Extension
     }
 
     /**
-     * Load dsn configuration
+     * Load dsn configuration.
      *
      * @param array $options A configuration array
      *
@@ -61,15 +60,15 @@ class LexikMaintenanceExtension extends Extension
      */
     protected function registerDsnConfiguration($options)
     {
-        if ( ! isset($options['table'])) {
+        if (!isset($options['table'])) {
             throw new InvalidArgumentException('You need to define table for dsn use');
         }
 
-        if ( ! isset($options['user'])) {
+        if (!isset($options['user'])) {
             throw new InvalidArgumentException('You need to define user for dsn use');
         }
 
-        if ( ! isset($options['password'])) {
+        if (!isset($options['password'])) {
             throw new InvalidArgumentException('You need to define password for dsn use');
         }
     }

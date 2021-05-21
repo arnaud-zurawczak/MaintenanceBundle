@@ -9,3 +9,4 @@ composer.lock
 coverage
 .phpunit.result.cache
 docker-compose.yaml
+/.php-cs-fixer.cache

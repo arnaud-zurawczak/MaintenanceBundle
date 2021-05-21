@@ -13,9 +13,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
 /**
- * Create a lock action
+ * Create a lock action.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DriverLockCommand extends Command
@@ -42,7 +41,8 @@ class DriverLockCommand extends Command
             ->setName('lexik:maintenance:lock')
             ->setDescription('Lock access to the site while maintenance...')
             ->addArgument('ttl', InputArgument::OPTIONAL, 'Overwrite time to life from your configuration, doesn\'t work with file or shm driver. Time in seconds.', null)
-            ->setHelp(<<<EOT
+            ->setHelp(
+                <<<EOT
 
     You can optionally set a time to life of the maintenance
 
@@ -69,6 +69,7 @@ EOT
         if ($input->isInteractive()) {
             if (!$this->askConfirmation('WARNING! Are you sure you wish to continue? (y/n)', $input, $output)) {
                 $output->writeln('<error>Maintenance cancelled!</error>');
+
                 return;
             }
         } elseif (null !== $input->getArgument('ttl')) {
@@ -99,32 +100,33 @@ EOT
             throw new \InvalidArgumentException('Time must be an integer');
         }
 
-        $output->writeln(array(
+        $output->writeln([
             '',
             $formatter->formatBlock('You are about to launch maintenance', 'bg=red;fg=white', true),
             '',
-        ));
+        ]);
 
         $ttl = null;
         if ($driver instanceof DriverTtlInterface) {
             if (null === $input->getArgument('ttl')) {
-                $output->writeln(array(
+                $output->writeln([
                     '',
                     'Do you want to redefine maintenance life time ?',
                     'If yes enter the number of seconds. Press enter to continue',
                     '',
-                ));
+                ]);
 
                 $ttl = $this->askAndValidate(
                     $input,
                     $output,
                     sprintf('<info>%s</info> [<comment>Default value in your configuration: %s</comment>]%s ', 'Set time', $driver->hasTtl() ? $driver->getTtl() : 'unlimited', ':'),
-                    function($value) use ($default) {
+                    function ($value) use ($default) {
                         if (!is_numeric($value) && null === $default) {
                             return null;
                         } elseif (!is_numeric($value)) {
                             throw new \InvalidArgumentException('Time must be an integer');
                         }
+
                         return $value;
                     },
                     1,
@@ -135,18 +137,19 @@ EOT
             $ttl = (int) $ttl;
             $this->ttl = $ttl ? $ttl : $input->getArgument('ttl');
         } else {
-            $output->writeln(array(
+            $output->writeln([
                 '',
                 sprintf('<fg=red>Ttl doesn\'t work with %s driver</>', get_class($driver)),
                 '',
-            ));
+            ]);
         }
     }
 
     /**
-     * Get driver
+     * Get driver.
      *
      * @return AbstractDriver
+     *
      * @throws \ErrorException
      */
     private function getDriver()
@@ -159,14 +162,14 @@ EOT
      * but use the ConfirmationQuestion when available.
      *
      * @param $question
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     *
      * @return mixed
      */
-    protected function askConfirmation($question, InputInterface $input, OutputInterface $output) {
+    protected function askConfirmation($question, InputInterface $input, OutputInterface $output)
+    {
         if (!$this->getHelperSet()->has('question')) {
             return $this->getHelper('dialog')
-                ->askConfirmation($output, '<question>' . $question . '</question>', 'y');
+                ->askConfirmation($output, '<question>'.$question.'</question>', 'y');
         }
 
         return $this->getHelper('question')
@@ -177,15 +180,15 @@ EOT
      * This method ensure that we stay compatible with symfony console 2.3 by using the deprecated dialog helper
      * but use the ConfirmationQuestion when available.
      *
-     * @param InputInterface $input
-     * @param OutputInterface $output
      * @param $question
      * @param $validator
-     * @param int $attempts
+     * @param int  $attempts
      * @param null $default
+     *
      * @return mixed
      */
-    protected function askAndValidate(InputInterface $input, OutputInterface $output, $question, $validator, $attempts = 1, $default = null) {
+    protected function askAndValidate(InputInterface $input, OutputInterface $output, $question, $validator, $attempts = 1, $default = null)
+    {
         if (!$this->getHelperSet()->has('question')) {
             return $this->getHelper('dialog')
                 ->askAndValidate($output, $question, $validator, $attempts, $default);

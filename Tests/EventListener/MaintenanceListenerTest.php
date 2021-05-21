@@ -4,8 +4,8 @@ namespace Lexik\Bundle\MaintenanceBundle\Tests\EventListener;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -15,25 +15,23 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Test for the maintenance listener
+ * Test for the maintenance listener.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class MaintenanceListenerTest extends TestCase
 {
-    protected
-        $container,
-        $factory;
+    protected $container;
+    protected $factory;
 
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and restrictive with no arguments
+     * and restrictive with no arguments.
      */
     public function testBaseRequest()
     {
-        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+        $driverOptions = ['class' => DriverFactory::DATABASE_DRIVER, 'options' => null];
 
         $request = Request::create('http://test.com/foo?bar=baz');
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
@@ -41,13 +39,13 @@ class MaintenanceListenerTest extends TestCase
 
         $this->container = $this->initContainer();
 
-        $this->factory = new DriverFactory($this->getDatabaseDriver(false),$this->getTranslator(), $driverOptions);
+        $this->factory = new DriverFactory($this->getDatabaseDriver(false), $this->getTranslator(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory);
         $this->assertTrue($listener->onKernelRequest($event), 'Permissive factory should approve without args');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, 'path', 'host', array('ip'), array('query'), array('cookie'), 'route');
+        $listener = new MaintenanceListenerTestWrapper($this->factory, 'path', 'host', ['ip'], ['query'], ['cookie'], 'route');
         $this->assertTrue($listener->onKernelRequest($event), 'Permissive factory should approve with args');
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
@@ -56,18 +54,18 @@ class MaintenanceListenerTest extends TestCase
         $listener = new MaintenanceListenerTestWrapper($this->factory);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without args');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, array(), array(), array(), null);
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, [], [], [], null);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without args');
     }
 
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and path filters
+     * and path filters.
      */
     public function testPathFilter()
     {
-        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+        $driverOptions = ['class' => DriverFactory::DATABASE_DRIVER, 'options' => null];
 
         $request = Request::create('http://test.com/foo?bar=baz');
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
@@ -94,11 +92,11 @@ class MaintenanceListenerTest extends TestCase
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and path filters
+     * and path filters.
      */
     public function testHostFilter()
     {
-        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+        $driverOptions = ['class' => DriverFactory::DATABASE_DRIVER, 'options' => null];
 
         $request = Request::create('http://test.com/foo?bar=baz');
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
@@ -128,11 +126,11 @@ class MaintenanceListenerTest extends TestCase
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and ip filters
+     * and ip filters.
      */
     public function testIPFilter()
     {
-        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+        $driverOptions = ['class' => DriverFactory::DATABASE_DRIVER, 'options' => null];
 
         $request = Request::create('http://test.com/foo?bar=baz');
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
@@ -146,16 +144,16 @@ class MaintenanceListenerTest extends TestCase
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without ips');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, array());
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, []);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny with empty ips');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, array('8.8.4.4'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, ['8.8.4.4']);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching ips');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, array('127.0.0.1'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, ['127.0.0.1']);
         $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on matching ips');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, '/barfoo', 'google.com', array('127.0.0.1'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, '/barfoo', 'google.com', ['127.0.0.1']);
         $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on non-matching path and host and matching ips');
     }
 
@@ -164,7 +162,7 @@ class MaintenanceListenerTest extends TestCase
      */
     public function testRouteFilter($debug, $route, $expected)
     {
-        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+        $driverOptions = ['class' => DriverFactory::DATABASE_DRIVER, 'options' => null];
 
         $request = Request::create('');
         $request->attributes->set('_route', $route);
@@ -177,12 +175,13 @@ class MaintenanceListenerTest extends TestCase
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array(), array(), $debug);
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, [], [], $debug);
 
-        $info = sprintf('Should be %s route %s with when we are %s debug env',
-            $expected === true ? 'allow' : 'deny',
+        $info = sprintf(
+            'Should be %s route %s with when we are %s debug env',
+            true === $expected ? 'allow' : 'deny',
             $route,
-            $debug === true ? 'in' : 'not in'
+            true === $debug ? 'in' : 'not in'
         );
 
         $this->assertTrue($listener->onKernelRequest($event) === $expected, $info);
@@ -190,29 +189,28 @@ class MaintenanceListenerTest extends TestCase
 
     public function routeProviderWithDebugContext()
     {
-        $debug = array(true, false);
-        $routes = array('route_1', '_route_started_with_underscore');
+        $debug = [true, false];
+        $routes = ['route_1', '_route_started_with_underscore'];
 
-        $data = array();
+        $data = [];
 
         foreach ($debug as $isDebug) {
             foreach ($routes as $route) {
-                $data[] = array($isDebug, $route, (true === $isDebug && '_' === $route[0]) ? false : true);
+                $data[] = [$isDebug, $route, (true === $isDebug && '_' === $route[0]) ? false : true];
             }
         }
 
         return $data;
     }
 
-
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and query filters
+     * and query filters.
      */
     public function testQueryFilter()
     {
-        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+        $driverOptions = ['class' => DriverFactory::DATABASE_DRIVER, 'options' => null];
 
         $request = Request::create('http://test.com/foo?bar=baz');
         $postRequest = Request::create('http://test.com/foo?bar=baz', 'POST');
@@ -228,35 +226,35 @@ class MaintenanceListenerTest extends TestCase
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without query');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array());
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, []);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny with empty query');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('some' => 'attribute'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, ['some' => 'attribute']);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching query');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('attribute'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, ['attribute']);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching query');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('bar' => 'baz'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, ['bar' => 'baz']);
         $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on matching get query');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, array('bar' => 'baz'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, ['bar' => 'baz']);
         $this->assertTrue($listener->onKernelRequest($postEvent), 'Restrictive factory should allow on matching post query');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, '/barfoo', 'google.com', array('8.8.1.1'), array('bar' => 'baz'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, '/barfoo', 'google.com', ['8.8.1.1'], ['bar' => 'baz']);
         $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on non-matching path, host and ip and matching query');
     }
 
     /**
      * Create request and test the listener
      * for scenarios with permissive firewall
-     * and cookie filters
+     * and cookie filters.
      */
     public function testCookieFilter()
     {
-        $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
+        $driverOptions = ['class' => DriverFactory::DATABASE_DRIVER, 'options' => null];
 
-        $request = Request::create('http://test.com/foo', 'GET', array(), array('bar' => 'baz'));
+        $request = Request::create('http://test.com/foo', 'GET', [], ['bar' => 'baz']);
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
@@ -268,50 +266,50 @@ class MaintenanceListenerTest extends TestCase
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null, null);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without cookies');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null, array());
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null, []);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny with empty cookies');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null, array('some' => 'attribute'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null, ['some' => 'attribute']);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching cookie');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null, array('attribute'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null, ['attribute']);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny on non matching cookie');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null, array('bar' => 'baz'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null, ['bar' => 'baz']);
         $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on matching cookie');
 
-        $listener = new MaintenanceListenerTestWrapper($this->factory, '/barfoo', 'google.com', array('8.8.1.1'), array('bar' => 'baz'), array('bar' => 'baz'));
+        $listener = new MaintenanceListenerTestWrapper($this->factory, '/barfoo', 'google.com', ['8.8.1.1'], ['bar' => 'baz'], ['bar' => 'baz']);
         $this->assertTrue($listener->onKernelRequest($event), 'Restrictive factory should allow on non-matching path, host, ip, query and matching cookie');
     }
-
 
     public function tearDown(): void
     {
         $this->container = null;
-        $this->factory   = null;
+        $this->factory = null;
     }
 
     /**
-     * Init a container
+     * Init a container.
      *
      * @return Container
      */
     protected function initContainer()
     {
-        return new ContainerBuilder(new ParameterBag(array(
-            'kernel.debug'          => false,
-            'kernel.bundles'        => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
-            'kernel.cache_dir'      => sys_get_temp_dir(),
-            'kernel.environment'    => 'dev',
-            'kernel.root_dir'       => __DIR__.'/../../../../', // src dir
+        return new ContainerBuilder(new ParameterBag([
+            'kernel.debug' => false,
+            'kernel.bundles' => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
+            'kernel.cache_dir' => sys_get_temp_dir(),
+            'kernel.environment' => 'dev',
+            'kernel.root_dir' => __DIR__.'/../../../../', // src dir
             'kernel.default_locale' => 'fr',
-        )));
+        ]));
     }
 
     /**
-     * Get a mock DatabaseDriver
+     * Get a mock DatabaseDriver.
      *
-     * @param boolean $lock
+     * @param bool $lock
+     *
      * @return MockObject
      */
     protected function getDatabaseDriver($lock = false)
@@ -330,7 +328,6 @@ class MaintenanceListenerTest extends TestCase
 
         return $db;
     }
-
 
     public function getTranslator()
     {

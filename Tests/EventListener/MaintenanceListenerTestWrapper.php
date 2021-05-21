@@ -2,8 +2,8 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Tests\EventListener;
 
-use Lexik\Bundle\MaintenanceBundle\Listener\MaintenanceListener;
 use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
+use Lexik\Bundle\MaintenanceBundle\Listener\MaintenanceListener;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class MaintenanceListenerTestWrapper extends MaintenanceListener
@@ -15,8 +15,7 @@ class MaintenanceListenerTestWrapper extends MaintenanceListener
     {
         try {
             parent::onKernelRequest($event);
-        }
-        catch (ServiceUnavailableException $e) {
+        } catch (ServiceUnavailableException $e) {
             return false;
         }
 
