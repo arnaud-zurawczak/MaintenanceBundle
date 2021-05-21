@@ -3,12 +3,14 @@
 namespace Lexik\Bundle\MaintenanceBundle\Command;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\AbstractDriver;
+use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverTtlInterface;
-
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Question\Question;
 
 /**
  * Create a lock action
@@ -16,9 +18,20 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class DriverLockCommand extends ContainerAwareCommand
+class DriverLockCommand extends Command
 {
     protected $ttl;
+
+    /**
+     * @var DriverFactory
+     */
+    private $driverFactory;
+
+    public function __construct(DriverFactory $driverFactory)
+    {
+        parent::__construct();
+        $this->driverFactory = $driverFactory;
+    }
 
     /**
      * {@inheritdoc}
@@ -134,10 +147,11 @@ EOT
      * Get driver
      *
      * @return AbstractDriver
+     * @throws \ErrorException
      */
     private function getDriver()
     {
-        return $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
+        return $this->driverFactory->getDriver();
     }
 
     /**
@@ -156,7 +170,7 @@ EOT
         }
 
         return $this->getHelper('question')
-            ->ask($input, $output, new \Symfony\Component\Console\Question\ConfirmationQuestion($question));
+            ->ask($input, $output, new ConfirmationQuestion($question));
     }
 
     /**
@@ -177,7 +191,7 @@ EOT
                 ->askAndValidate($output, $question, $validator, $attempts, $default);
         }
 
-        $question = new \Symfony\Component\Console\Question\Question($question, $default);
+        $question = new Question($question, $default);
         $question->setValidator($validator);
         $question->setMaxAttempts($attempts);
 
