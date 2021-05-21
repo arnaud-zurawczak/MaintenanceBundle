@@ -1,8 +1,10 @@
 OVERVIEW
 ========
 
+*This repository is forked from [LexikMaintenanceBundle](https://github.com/lexik/LexikMaintenanceBundle).*
+
 This bundle allows you to place your website in maintenance mode by calling two commands in your console. A page with status code 503 appears to users, 
-it is possible to authorize certain ips addresses stored in your configuration
+it is possible to authorize certain ips addresses stored in your configuration.
 
 
 [![pipeline status](https://gitlab.com/adynemo/maintenance-bundle/badges/master/pipeline.svg)](https://gitlab.com/adynemo/maintenance-bundle/-/commits/master)

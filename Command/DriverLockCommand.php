@@ -8,6 +8,7 @@ use Lexik\Bundle\MaintenanceBundle\Drivers\DriverTtlInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
@@ -40,23 +41,8 @@ class DriverLockCommand extends Command
         $this
             ->setName('lexik:maintenance:lock')
             ->setDescription('Lock access to the site while maintenance...')
-            ->addArgument('ttl', InputArgument::OPTIONAL, 'Overwrite time to life from your configuration, doesn\'t work with file or shm driver. Time in seconds.', null)
-            ->setHelp(
-                <<<EOT
-
-    You can optionally set a time to life of the maintenance
-
-   <info>%command.full_name% 3600</info>
-
-    You can execute the lock without a warning message which you need to interact with:
-
-    <info>%command.full_name% --no-interaction</info>
-
-    Or
-
-    <info>%command.full_name% 3600 -n</info>
-EOT
-            );
+            ->addArgument('ttl', InputArgument::OPTIONAL, 'Overwrite time to life from your configuration, doesn\'t work with file or shm driver. Time in seconds.')
+            ->addOption('no-interaction', 'n', InputOption::VALUE_OPTIONAL, 'You can execute the lock without a warning message which you need to interact');
     }
 
     /**
@@ -135,7 +121,7 @@ EOT
             }
 
             $ttl = (int) $ttl;
-            $this->ttl = $ttl ? $ttl : $input->getArgument('ttl');
+            $this->ttl = $ttl !== 0 ? $ttl : $input->getArgument('ttl');
         } else {
             $output->writeln([
                 '',

@@ -5,6 +5,7 @@ namespace Lexik\Bundle\MaintenanceBundle\Command;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
@@ -34,13 +35,7 @@ class DriverUnlockCommand extends Command
         $this
             ->setName('lexik:maintenance:unlock')
             ->setDescription('Unlock access to the site while maintenance...')
-            ->setHelp(
-                <<<EOT
-    You can execute the unlock without a warning message which you need to interact with:
-
-    <info>%command.full_name% --no-interaction</info>
-EOT
-            );
+            ->addOption('no-interaction', 'n', InputOption::VALUE_OPTIONAL, 'You can execute the unlock without a warning message which you need to interact');
     }
 
     /**
@@ -66,7 +61,7 @@ EOT
     {
         $formatter = $this->getHelperSet()->get('formatter');
 
-        if ($input->getOption('no-interaction', false)) {
+        if ($input->getOption('no-interaction')) {
             $confirmation = true;
         } else {
             // confirm

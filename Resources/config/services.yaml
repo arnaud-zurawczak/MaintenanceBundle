@@ -1,0 +1,43 @@
+services:
+  Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver:
+    id: lexik_maintenance.driver.database
+    arguments:
+      - '@?doctrine'
+
+  Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory:
+    id: lexik_maintenance.driver.factory
+    arguments:
+      - '@lexik_maintenance.driver.database'
+      - '@translator'
+      - '%lexik_maintenance.driver%'
+
+  Lexik\Bundle\MaintenanceBundle\Listener\MaintenanceListener:
+    id: lexik_maintenance.listener
+    tags:
+      - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+      - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+    arguments:
+      - '@lexik_maintenance.driver.factory'
+      - '%lexik_maintenance.authorized.path%'
+      - '%lexik_maintenance.authorized.host%'
+      - '%lexik_maintenance.authorized.ips%'
+      - '%lexik_maintenance.authorized.query%'
+      - '%lexik_maintenance.authorized.cookie%'
+      - '%lexik_maintenance.authorized.route%'
+      - '%lexik_maintenance.authorized.attributes%'
+      - '%lexik_maintenance.authorized.http_code%'
+      - '%lexik_maintenance.authorized.http_status%'
+      - '%lexik_maintenance.authorized.exception_message%'
+      - '%kernel.debug%'
+
+  Lexik\Bundle\MaintenanceBundle\Command\DriverLockCommand:
+    tags:
+      - 'console.command'
+    arguments:
+      - '@lexik_maintenance.driver.factory'
+
+  Lexik\Bundle\MaintenanceBundle\Command\DriverUnlockCommand:
+    tags:
+      - 'console.command'
+    arguments:
+      - '@lexik_maintenance.driver.factory'

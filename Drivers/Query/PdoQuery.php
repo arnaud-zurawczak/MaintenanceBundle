@@ -146,8 +146,7 @@ abstract class PdoQuery
         }
 
         $stmt->execute();
-        $return = $stmt->fetchAll(\PDO::FETCH_ASSOC);
 
-        return $return;
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
     }
 }

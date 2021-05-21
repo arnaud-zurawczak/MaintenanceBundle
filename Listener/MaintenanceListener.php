@@ -46,12 +46,12 @@ class MaintenanceListener
     protected $ips;
 
     /**
-     * @var array
+     * @var array|null
      */
     protected $query;
 
     /**
-     * @var array
+     * @var array|null
      */
     protected $cookie;
 
@@ -99,32 +99,32 @@ class MaintenanceListener
      * it if at least one of the provided arguments is not empty and matches the
      *  incoming request.
      *
-     * @param DriverFactory $driverFactory          The driver factory
-     * @param string        $path                   A regex for the path
-     * @param string        $host                   A regex for the host
-     * @param array         $ips                    The list of IP addresses
-     * @param array         $query                  Query arguments
-     * @param array         $cookie                 Cookies
-     * @param string        $route                  Route name
-     * @param array         $attributes             Attributes
-     * @param int           $http_code              http status code for response
-     * @param string        $http_status            http status message for response
-     * @param null          $http_exception_message http response page exception message
-     * @param bool          $debug
+     * @param DriverFactory $driverFactory The driver factory
+     * @param string|null $path A regex for the path
+     * @param string|null $host A regex for the host
+     * @param array|null $ips The list of IP addresses
+     * @param array|null $query Query arguments
+     * @param array|null $cookie Cookies
+     * @param string|null $route Route name
+     * @param array $attributes Attributes
+     * @param int|null $http_code http status code for response
+     * @param string|null $http_status http status message for response
+     * @param string|null $http_exception_message http response page exception message
+     * @param bool $debug
      */
     public function __construct(
         DriverFactory $driverFactory,
-        $path = null,
-        $host = null,
-        $ips = null,
-        $query = [],
-        $cookie = [],
-        $route = null,
-        $attributes = [],
-        $http_code = null,
-        $http_status = null,
-        $http_exception_message = null,
-        $debug = false
+        string $path = null,
+        string $host = null,
+        array $ips = null,
+        ?array $query = [],
+        ?array $cookie = [],
+        string $route = null,
+        array $attributes = [],
+        int $http_code = null,
+        string $http_status = null,
+        string $http_exception_message = null,
+        bool $debug = false
     ) {
         $this->driverFactory = $driverFactory;
         $this->path = $path;
@@ -190,7 +190,7 @@ class MaintenanceListener
         }
 
         $route = $request->get('_route');
-        if (null !== $this->route && preg_match('{'.$this->route.'}', $route) || (true === $this->debug && '_' === $route[0])) {
+        if (null !== $this->route && preg_match('{'.$this->route.'}', $route) || ($this->debug && '_' === $route[0])) {
             return;
         }
 
