@@ -285,7 +285,7 @@ class MaintenanceListenerTest extends TestCase
     }
 
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->container = null;
         $this->factory   = null;

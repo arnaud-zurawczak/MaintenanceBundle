@@ -4,9 +4,6 @@ services:
     build: ./
     volumes:
       - ${PWD}/:/app
-      - ${HOME}/.bash-git-prompt/:/root/.bash-git-prompt
-      - ${HOME}/.bashrc:/root/.bashrc
-      - ${HOME}/.ssh/:/root/.ssh
       - ${HOME}/.composer/:/root/.composer/
     restart: always
     tty: true

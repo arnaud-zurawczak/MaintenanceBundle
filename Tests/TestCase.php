@@ -28,9 +28,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Initialize kernel app and some Symfony2 services.
      *
-     * @see \PHPUnit\Framework\TestCase::setUp()
+     * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         // Boot the AppKernel in the test environment and with the debug.
         $this->kernel = new \AppKernel('test', true);
@@ -46,9 +46,9 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @see \PHPUnit\Framework\TestCase::tearDown()
+     * {@inheritDoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->entityManager->getConnection()->rollback();
 

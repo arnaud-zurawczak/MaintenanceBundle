@@ -7,3 +7,5 @@ vendor
 composer.lock
 .gitlab-ci-local
 coverage
+.phpunit.result.cache
+docker-compose.yaml

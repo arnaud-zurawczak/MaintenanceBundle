@@ -20,7 +20,7 @@ class DriverFactoryTest extends \PHPUnit\Framework\TestCase
     protected $factory;
     protected $container;
 
-    public function setUp()
+    public function setUp(): void
     {
         $driverOptions = array(
             'class' => FileDriver::class,
@@ -32,7 +32,7 @@ class DriverFactoryTest extends \PHPUnit\Framework\TestCase
         $this->container->set('lexik_maintenance.driver.factory', $this->factory);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->factory = null;
     }

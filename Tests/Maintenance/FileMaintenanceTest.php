@@ -19,19 +19,19 @@ class FileMaintenanceTest extends TestCase
     static protected $tmpDir;
     protected $container;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
 
         self::$tmpDir = sys_get_temp_dir().'/symfony2_finder';
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->container = $this->initContainer();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         $this->container = null;
     }
@@ -80,7 +80,11 @@ class FileMaintenanceTest extends TestCase
 
         $fileM->unlock();
 
-        $this->assertFileNotExists($options['file_path']);
+        if ((float) \PHPUnit\Runner\Version::id() < 9.0) {
+            $this->assertFileNotExists($options['file_path']);
+        } else {
+            $this->assertFileDoesNotExist($options['file_path']);
+        }
     }
 
     public function testIsExists()
@@ -111,7 +115,7 @@ class FileMaintenanceTest extends TestCase
         $this->assertEquals('lexik_maintenance.not_success_unlock', $fileM->getMessageUnlock(false));
     }
 
-    static public function tearDownAfterClass()
+    static public function tearDownAfterClass(): void
     {
         parent::tearDownAfterClass();
     }
