@@ -2,11 +2,13 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 
+use Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
-use Lexik\Bundle\MaintenanceBundle\Tests\TestHelper;
+use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\Translation\MessageSelector;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Test driver factory
@@ -14,7 +16,7 @@ use Symfony\Component\Translation\MessageSelector;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class DriverFactoryTest extends \PHPUnit_Framework_TestCase
+class DriverFactoryTest extends \PHPUnit\Framework\TestCase
 {
     protected $factory;
     protected $container;
@@ -22,7 +24,7 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
     public function setUp()
     {
         $driverOptions = array(
-            'class' => '\Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver',
+            'class' => FileDriver::class,
             'options' => array('file_path' => sys_get_temp_dir().'/lock'));
 
         $this->container = $this->initContainer();
@@ -39,15 +41,13 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
     public function testDriver()
     {
         $driver = $this->factory->getDriver();
-        $this->assertInstanceOf('\Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver', $driver);
+        $this->assertInstanceOf(FileDriver::class, $driver);
     }
 
-    /**
-     * @expectedException ErrorException
-     */
     public function testExceptionConstructor()
     {
-        $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), array());
+        $this->expectException(\ErrorException::class);
+        new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), array());
     }
 
     public function testWithDatabaseChoice()
@@ -58,7 +58,7 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
 
         $this->container->set('lexik_maintenance.driver.factory', $factory);
 
-        $this->assertInstanceOf('Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver', $factory->getDriver());
+        $this->assertInstanceOf(DatabaseDriver::class, $factory->getDriver());
     }
 
     public function testExceptionGetDriver()
@@ -68,45 +68,31 @@ class DriverFactoryTest extends \PHPUnit_Framework_TestCase
         $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $driverOptions);
         $this->container->set('lexik_maintenance.driver.factory', $factory);
 
-        try {
-            $factory->getDriver();
-        } catch (\ErrorException $expected) {
-            return;
-        }
-
-        $this->fail('An expected exception has not been raised.');
+        $this->expectException(\ErrorException::class);
+        $factory->getDriver();
     }
 
     protected function initContainer()
     {
-        $container = new ContainerBuilder(new ParameterBag(array(
+        return new ContainerBuilder(new ParameterBag(array(
             'kernel.debug'          => false,
-            'kernel.bundles'        => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
+            'kernel.bundles'        => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
             'kernel.cache_dir'      => sys_get_temp_dir(),
             'kernel.environment'    => 'dev',
             'kernel.root_dir'       => __DIR__.'/../../../../', // src dir
             'kernel.default_locale' => 'fr',
         )));
-
-        return $container;
     }
 
     protected function getDatabaseDriver()
     {
-        $db = $this->getMockbuilder('Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver')
+        return $this->getMockbuilder(DatabaseDriver::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-
-        return $db;
     }
 
     public function getTranslator()
     {
-        /** @var MessageSelector|\PHPUnit_Framework_MockObject_MockObject $messageSelector */
-        $messageSelector = $this->getMockBuilder('Symfony\Component\Translation\MessageSelector')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return TestHelper::getTranslator($this->container, $messageSelector);
+        return $this->createMock(TranslatorInterface::class);
     }
 }

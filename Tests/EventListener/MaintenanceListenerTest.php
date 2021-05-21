@@ -2,14 +2,17 @@
 
 namespace Lexik\Bundle\MaintenanceBundle\Tests\EventListener;
 
+use Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
-use Lexik\Bundle\MaintenanceBundle\Tests\TestHelper;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\Translation\MessageSelector;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Test for the maintenance listener
@@ -17,7 +20,7 @@ use Symfony\Component\Translation\MessageSelector;
  * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
+class MaintenanceListenerTest extends TestCase
 {
     protected
         $container,
@@ -33,7 +36,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
 
         $request = Request::create('http://test.com/foo?bar=baz');
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
@@ -67,7 +70,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
 
         $request = Request::create('http://test.com/foo?bar=baz');
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
@@ -98,7 +101,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
 
         $request = Request::create('http://test.com/foo?bar=baz');
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
@@ -132,7 +135,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
 
         $request = Request::create('http://test.com/foo?bar=baz');
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
@@ -166,7 +169,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         $request = Request::create('');
         $request->attributes->set('_route', $route);
 
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
@@ -213,7 +216,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
 
         $request = Request::create('http://test.com/foo?bar=baz');
         $postRequest = Request::create('http://test.com/foo?bar=baz', 'POST');
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
         $postEvent = new GetResponseEvent($kernel, $postRequest, HttpKernelInterface::MASTER_REQUEST);
 
@@ -254,7 +257,7 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         $driverOptions = array('class' => DriverFactory::DATABASE_DRIVER, 'options' => null);
 
         $request = Request::create('http://test.com/foo', 'GET', array(), array('bar' => 'baz'));
-        $kernel = $this->getMockBuilder('Symfony\Component\HttpKernel\HttpKernelInterface')->getMock();
+        $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
         $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
@@ -295,27 +298,25 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
      */
     protected function initContainer()
     {
-        $container = new ContainerBuilder(new ParameterBag(array(
+        return new ContainerBuilder(new ParameterBag(array(
             'kernel.debug'          => false,
-            'kernel.bundles'        => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
+            'kernel.bundles'        => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
             'kernel.cache_dir'      => sys_get_temp_dir(),
             'kernel.environment'    => 'dev',
             'kernel.root_dir'       => __DIR__.'/../../../../', // src dir
             'kernel.default_locale' => 'fr',
         )));
-
-        return $container;
     }
 
     /**
      * Get a mock DatabaseDriver
      *
      * @param boolean $lock
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getDatabaseDriver($lock = false)
     {
-        $db = $this->getMockbuilder('Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver')
+        $db = $this->getMockbuilder(DatabaseDriver::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -330,18 +331,9 @@ class MaintenanceListenerTest extends \PHPUnit_Framework_TestCase
         return $db;
     }
 
-    /**
-     * Get Translator
-     *
-     * @return \Symfony\Bundle\FrameworkBundle\Translation\Translator
-     */
+
     public function getTranslator()
     {
-        /** @var MessageSelector|\PHPUnit_Framework_MockObject_MockObject $messageSelector */
-        $messageSelector = $this->getMockBuilder('Symfony\Component\Translation\MessageSelector')
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        return TestHelper::getTranslator($this->container, $messageSelector);
+        return $this->createMock(TranslatorInterface::class);
     }
 }

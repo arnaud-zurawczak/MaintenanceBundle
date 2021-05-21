@@ -4,9 +4,10 @@ namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
 use Lexik\Bundle\MaintenanceBundle\Tests\TestHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
-use Symfony\Component\Translation\MessageSelector;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Test driver file
@@ -52,11 +53,9 @@ class FileMaintenanceTest extends TestCase
         $this->assertFalse($fileM2->decide());
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
     public function testExceptionInvalidPath()
     {
+        $this->expectException(\InvalidArgumentException::class);
         $fileM = new FileDriver(array());
         $fileM->setTranslator($this->getTranslator());
     }
@@ -98,19 +97,19 @@ class FileMaintenanceTest extends TestCase
 
     public function testMessages()
     {
-        $options = array('file_path' => self::$tmpDir.'/lock.lock', 'ttl' => 3600);
+        $options = ['file_path' => self::$tmpDir.'/lock.lock', 'ttl' => 3600];
 
         $fileM = new FileDriver($options);
         $fileM->setTranslator($this->getTranslator());
         $fileM->lock();
 
         // lock
-        $this->assertEquals($fileM->getMessageLock(true), 'lexik_maintenance.success_lock_file');
-        $this->assertEquals($fileM->getMessageLock(false), 'lexik_maintenance.not_success_lock');
+        $this->assertEquals('lexik_maintenance.success_lock_file', $fileM->getMessageLock(true));
+        $this->assertEquals('lexik_maintenance.not_success_lock', $fileM->getMessageLock(false));
 
         // unlock
-        $this->assertEquals($fileM->getMessageUnlock(true), 'lexik_maintenance.success_unlock');
-        $this->assertEquals($fileM->getMessageUnlock(false), 'lexik_maintenance.not_success_unlock');
+        $this->assertEquals('lexik_maintenance.success_unlock', $fileM->getMessageUnlock(true));
+        $this->assertEquals('lexik_maintenance.not_success_unlock', $fileM->getMessageUnlock(false));
     }
 
     static public function tearDownAfterClass()
@@ -120,25 +119,22 @@ class FileMaintenanceTest extends TestCase
 
     protected function initContainer()
     {
-        $container = new ContainerBuilder(new ParameterBag(array(
+        return new ContainerBuilder(new ParameterBag([
             'kernel.debug'          => false,
-            'kernel.bundles'        => array('MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'),
+            'kernel.bundles'        => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
             'kernel.cache_dir'      => sys_get_temp_dir(),
             'kernel.environment'    => 'dev',
             'kernel.root_dir'       => __DIR__.'/../../../../', // src dir
             'kernel.default_locale' => 'fr',
-        )));
-
-        return $container;
+        ]));
     }
 
     public function getTranslator()
     {
-        /** @var MessageSelector|\PHPUnit_Framework_MockObject_MockObject $messageSelector */
-        $messageSelector = $this->getMockBuilder('Symfony\Component\Translation\MessageSelector')
-            ->disableOriginalConstructor()
-            ->getMock();
+        /** @var TranslatorInterface|MockObject $identityTranslator */
+        $translator = $this->createMock(TranslatorInterface::class);
+        $translator->method('trans')->willReturnArgument(0);
 
-        return TestHelper::getTranslator($this->container, $messageSelector);
+        return $translator;
     }
 }

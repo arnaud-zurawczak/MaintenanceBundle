@@ -8,7 +8,7 @@ require_once __DIR__.'/../../../../app/AppKernel.php';
  * A PHPUnit testcase with some Symfony2 tools.
  *
  */
-abstract class TestCase extends \PHPUnit_Framework_TestCase
+abstract class TestCase extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var Symfony\Component\HttpKernel\AppKernel
