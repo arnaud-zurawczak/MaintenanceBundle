@@ -10,7 +10,7 @@ use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -37,7 +37,7 @@ class MaintenanceListenerTest extends TestCase
 
         $request = Request::create('http://test.com/foo?bar=baz');
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
 
@@ -71,7 +71,7 @@ class MaintenanceListenerTest extends TestCase
 
         $request = Request::create('http://test.com/foo?bar=baz');
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
 
@@ -102,7 +102,7 @@ class MaintenanceListenerTest extends TestCase
 
         $request = Request::create('http://test.com/foo?bar=baz');
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
 
@@ -136,7 +136,7 @@ class MaintenanceListenerTest extends TestCase
 
         $request = Request::create('http://test.com/foo?bar=baz');
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
 
@@ -170,7 +170,7 @@ class MaintenanceListenerTest extends TestCase
         $request->attributes->set('_route', $route);
 
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
 
@@ -217,8 +217,8 @@ class MaintenanceListenerTest extends TestCase
         $request = Request::create('http://test.com/foo?bar=baz');
         $postRequest = Request::create('http://test.com/foo?bar=baz', 'POST');
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
-        $postEvent = new GetResponseEvent($kernel, $postRequest, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $postEvent = new RequestEvent($kernel, $postRequest, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
 
@@ -258,7 +258,7 @@ class MaintenanceListenerTest extends TestCase
 
         $request = Request::create('http://test.com/foo', 'GET', array(), array('bar' => 'baz'));
         $kernel = $this->getMockBuilder(HttpKernelInterface::class)->getMock();
-        $event = new GetResponseEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
+        $event = new RequestEvent($kernel, $request, HttpKernelInterface::MASTER_REQUEST);
 
         $this->container = $this->initContainer();
 

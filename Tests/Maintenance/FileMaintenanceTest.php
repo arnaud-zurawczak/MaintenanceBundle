@@ -3,7 +3,6 @@
 namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
-use Lexik\Bundle\MaintenanceBundle\Tests\TestHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;

@@ -5,7 +5,6 @@ namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver;
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
-use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Contracts\Translation\TranslatorInterface;

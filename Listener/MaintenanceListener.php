@@ -4,10 +4,9 @@ namespace Lexik\Bundle\MaintenanceBundle\Listener;
 
 use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
-
 use Symfony\Component\HttpKernel\HttpKernelInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Event\FilterResponseEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpFoundation\IpUtils;
 
 /**
@@ -21,7 +20,7 @@ class MaintenanceListener
     /**
      * Service driver factory
      *
-     * @var \Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory
+     * @var DriverFactory
      */
     protected $driverFactory;
 
@@ -143,13 +142,13 @@ class MaintenanceListener
     }
 
     /**
-     * @param GetResponseEvent $event GetResponseEvent
+     * @param RequestEvent $event
      *
      * @return void
      *
      * @throws ServiceUnavailableException
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function onKernelRequest(RequestEvent $event)
     {
         if(!$event->isMasterRequest()){
             return;
@@ -210,10 +209,10 @@ class MaintenanceListener
     /**
      * Rewrites the http code of the response
      *
-     * @param FilterResponseEvent $event FilterResponseEvent
+     * @param ResponseEvent $event
      * @return void
      */
-    public function onKernelResponse(FilterResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event)
     {
         if ($this->handleResponse && $this->http_code !== null) {
             $response = $event->getResponse();

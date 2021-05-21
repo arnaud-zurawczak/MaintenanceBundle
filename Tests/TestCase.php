@@ -28,7 +28,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     /**
      * Initialize kernel app and some Symfony2 services.
      *
-     * @see \PHPUnit_Framework_TestCase::setUp()
+     * @see \PHPUnit\Framework\TestCase::setUp()
      */
     protected function setUp()
     {
@@ -46,7 +46,7 @@ abstract class TestCase extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @see \PHPUnit_Framework_TestCase::tearDown()
+     * @see \PHPUnit\Framework\TestCase::tearDown()
      */
     protected function tearDown()
     {
