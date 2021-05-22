@@ -99,18 +99,18 @@ class MaintenanceListener
      * it if at least one of the provided arguments is not empty and matches the
      *  incoming request.
      *
-     * @param DriverFactory $driverFactory The driver factory
-     * @param string|null $path A regex for the path
-     * @param string|null $host A regex for the host
-     * @param array|null $ips The list of IP addresses
-     * @param array|null $query Query arguments
-     * @param array|null $cookie Cookies
-     * @param string|null $route Route name
-     * @param array $attributes Attributes
-     * @param int|null $http_code http status code for response
-     * @param string|null $http_status http status message for response
-     * @param string|null $http_exception_message http response page exception message
-     * @param bool $debug
+     * @param DriverFactory $driverFactory          The driver factory
+     * @param string|null   $path                   A regex for the path
+     * @param string|null   $host                   A regex for the host
+     * @param array|null    $ips                    The list of IP addresses
+     * @param array|null    $query                  Query arguments
+     * @param array|null    $cookie                 Cookies
+     * @param string|null   $route                  Route name
+     * @param array         $attributes             Attributes
+     * @param int|null      $http_code              http status code for response
+     * @param string|null   $http_status            http status message for response
+     * @param string|null   $http_exception_message http response page exception message
+     * @param bool          $debug                  debug mode
      */
     public function __construct(
         DriverFactory $driverFactory,

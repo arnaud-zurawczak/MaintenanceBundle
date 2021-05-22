@@ -121,7 +121,7 @@ class DriverLockCommand extends Command
             }
 
             $ttl = (int) $ttl;
-            $this->ttl = $ttl !== 0 ? $ttl : $input->getArgument('ttl');
+            $this->ttl = 0 !== $ttl ? $ttl : $input->getArgument('ttl');
         } else {
             $output->writeln([
                 '',
