@@ -300,7 +300,7 @@ class MaintenanceListenerTest extends TestCase
             'kernel.bundles' => ['MaintenanceBundle' => 'Ady\Bundle\MaintenanceBundle'],
             'kernel.cache_dir' => sys_get_temp_dir(),
             'kernel.environment' => 'dev',
-            'kernel.root_dir' => __DIR__.'/../../../../', // src dir
+            'kernel.project_dir' => __DIR__.'/../../../../', // src dir
             'kernel.default_locale' => 'fr',
         ]));
     }

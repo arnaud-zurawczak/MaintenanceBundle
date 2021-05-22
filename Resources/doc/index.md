@@ -31,8 +31,8 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
 
              # File driver
             class: '\Ady\Bundle\MaintenanceBundle\Drivers\FileDriver'                  # class for file driver
-            options: {file_path: %kernel.root_dir%/../app/cache/lock}                  # file_path is the complete path for create the file (Symfony < 3.0)
-            options: {file_path: %kernel.root_dir%/../var/cache/lock}                  # file_path is the complete path for create the file (Symfony >= 3.0)
+            options: {file_path: %kernel.project_dir%/../app/cache/lock}                  # file_path is the complete path for create the file (Symfony < 3.0)
+            options: {file_path: %kernel.project_dir%/../var/cache/lock}                  # file_path is the complete path for create the file (Symfony >= 3.0)
 
              # Shared memory driver
             class: '\Ady\Bundle\MaintenanceBundle\Drivers\ShmDriver'                   # class for shared memory driver

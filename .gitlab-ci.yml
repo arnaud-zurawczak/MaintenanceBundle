@@ -51,5 +51,5 @@ test:8.0:
     SYMFONY_DEPRECATIONS_HELPER: 'max[direct]=0'
     XDEBUG: '3.0.0'
   script:
-    - ./vendor/bin/phpunit --colors=never
+    - ./vendor/bin/phpunit --colors=never -c phpunit.php80.xml
     - ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff

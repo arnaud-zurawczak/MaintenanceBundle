@@ -28,7 +28,7 @@
     </filter>
 
     <php>
-        <server name="ROOT_DIR" value="../../../../.." />
+        <server name="PROJECT_DIR" value="../../../../.." />
         <server name="SYMFONY_DEPRECATIONS_HELPER" value="max[direct]=0" />
     </php>
 
