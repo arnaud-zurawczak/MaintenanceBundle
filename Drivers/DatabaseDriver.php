@@ -2,9 +2,9 @@
 
 namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
-use Doctrine\Bundle\DoctrineBundle\Registry;
 use Ady\Bundle\MaintenanceBundle\Drivers\Query\DefaultQuery;
 use Ady\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 
 /**
  * Class driver for handle database.
