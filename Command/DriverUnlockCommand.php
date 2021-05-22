@@ -1,8 +1,8 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Command;
+namespace Ady\Bundle\MaintenanceBundle\Command;
 
-use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
+use Ady\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -33,7 +33,7 @@ class DriverUnlockCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('lexik:maintenance:unlock')
+            ->setName('ady:maintenance:unlock')
             ->setDescription('Unlock access to the site while maintenance...')
             ->addOption('no-interaction', 'n', InputOption::VALUE_OPTIONAL, 'You can execute the unlock without a warning message which you need to interact');
     }

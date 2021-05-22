@@ -9,3 +9,7 @@ RUN curl -sS https://getcomposer.org/installer | php && \
     mv composer.phar /usr/local/bin/composer
 
 COPY "docker/php.ini" "$PHP_INI_DIR/conf.d/php-custom.ini"
+
+RUN apt-get install -y zlib1g-dev libicu-dev g++ > /dev/null \
+    && docker-php-ext-configure intl \
+    && docker-php-ext-install intl

@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
 /**
  * Interface DriverTtlInterface.

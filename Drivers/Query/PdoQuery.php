@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers\Query;
+namespace Ady\Bundle\MaintenanceBundle\Drivers\Query;
 
 /**
  * Abstract class to handle PDO connection.

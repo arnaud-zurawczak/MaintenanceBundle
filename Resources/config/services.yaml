@@ -1,43 +1,43 @@
 services:
-  lexik_maintenance.driver.database:
-    class: Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver
+  ady_maintenance.driver.database:
+    class: Ady\Bundle\MaintenanceBundle\Drivers\DatabaseDriver
     arguments:
       - '@?doctrine'
 
-  lexik_maintenance.driver.factory:
-    class: Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory
+  ady_maintenance.driver.factory:
+    class: Ady\Bundle\MaintenanceBundle\Drivers\DriverFactory
     arguments:
-      - '@lexik_maintenance.driver.database'
+      - '@ady_maintenance.driver.database'
       - '@translator'
-      - '%lexik_maintenance.driver%'
+      - '%ady_maintenance.driver%'
 
-  lexik_maintenance.listener:
-    class: Lexik\Bundle\MaintenanceBundle\Listener\MaintenanceListener
+  ady_maintenance.listener:
+    class: Ady\Bundle\MaintenanceBundle\Listener\MaintenanceListener
     tags:
       - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
       - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
     arguments:
-      - '@lexik_maintenance.driver.factory'
-      - '%lexik_maintenance.authorized.path%'
-      - '%lexik_maintenance.authorized.host%'
-      - '%lexik_maintenance.authorized.ips%'
-      - '%lexik_maintenance.authorized.query%'
-      - '%lexik_maintenance.authorized.cookie%'
-      - '%lexik_maintenance.authorized.route%'
-      - '%lexik_maintenance.authorized.attributes%'
-      - '%lexik_maintenance.response.http_code%'
-      - '%lexik_maintenance.response.http_status%'
-      - '%lexik_maintenance.response.exception_message%'
+      - '@ady_maintenance.driver.factory'
+      - '%ady_maintenance.authorized.path%'
+      - '%ady_maintenance.authorized.host%'
+      - '%ady_maintenance.authorized.ips%'
+      - '%ady_maintenance.authorized.query%'
+      - '%ady_maintenance.authorized.cookie%'
+      - '%ady_maintenance.authorized.route%'
+      - '%ady_maintenance.authorized.attributes%'
+      - '%ady_maintenance.response.http_code%'
+      - '%ady_maintenance.response.http_status%'
+      - '%ady_maintenance.response.exception_message%'
       - '%kernel.debug%'
 
-  Lexik\Bundle\MaintenanceBundle\Command\DriverLockCommand:
+  Ady\Bundle\MaintenanceBundle\Command\DriverLockCommand:
     tags:
       - 'console.command'
     arguments:
-      - '@lexik_maintenance.driver.factory'
+      - '@ady_maintenance.driver.factory'
 
-  Lexik\Bundle\MaintenanceBundle\Command\DriverUnlockCommand:
+  Ady\Bundle\MaintenanceBundle\Command\DriverUnlockCommand:
     tags:
       - 'console.command'
     arguments:
-      - '@lexik_maintenance.driver.factory'
+      - '@ady_maintenance.driver.factory'

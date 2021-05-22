@@ -1,9 +1,9 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Tests\EventListener;
+namespace Ady\Bundle\MaintenanceBundle\Tests\EventListener;
 
-use Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver;
-use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
+use Ady\Bundle\MaintenanceBundle\Drivers\DatabaseDriver;
+use Ady\Bundle\MaintenanceBundle\Drivers\DriverFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Container;
@@ -40,7 +40,7 @@ class MaintenanceListenerTest extends TestCase
         $this->container = $this->initContainer();
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(false), $this->getTranslator(), $driverOptions);
-        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+        $this->container->set('ady_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory);
         $this->assertTrue($listener->onKernelRequest($event), 'Permissive factory should approve without args');
@@ -49,7 +49,7 @@ class MaintenanceListenerTest extends TestCase
         $this->assertTrue($listener->onKernelRequest($event), 'Permissive factory should approve with args');
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
-        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+        $this->container->set('ady_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without args');
@@ -74,7 +74,7 @@ class MaintenanceListenerTest extends TestCase
         $this->container = $this->initContainer();
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
-        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+        $this->container->set('ady_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without path');
@@ -105,7 +105,7 @@ class MaintenanceListenerTest extends TestCase
         $this->container = $this->initContainer();
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
-        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+        $this->container->set('ady_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without host');
@@ -139,7 +139,7 @@ class MaintenanceListenerTest extends TestCase
         $this->container = $this->initContainer();
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
-        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+        $this->container->set('ady_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without ips');
@@ -173,7 +173,7 @@ class MaintenanceListenerTest extends TestCase
         $this->container = $this->initContainer();
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
-        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+        $this->container->set('ady_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, [], [], $debug);
 
@@ -221,7 +221,7 @@ class MaintenanceListenerTest extends TestCase
         $this->container = $this->initContainer();
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
-        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+        $this->container->set('ady_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without query');
@@ -261,7 +261,7 @@ class MaintenanceListenerTest extends TestCase
         $this->container = $this->initContainer();
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(true), $this->getTranslator(), $driverOptions);
-        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+        $this->container->set('ady_maintenance.driver.factory', $this->factory);
 
         $listener = new MaintenanceListenerTestWrapper($this->factory, null, null, null, null, null);
         $this->assertFalse($listener->onKernelRequest($event), 'Restrictive factory should deny without cookies');
@@ -297,7 +297,7 @@ class MaintenanceListenerTest extends TestCase
     {
         return new ContainerBuilder(new ParameterBag([
             'kernel.debug' => false,
-            'kernel.bundles' => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
+            'kernel.bundles' => ['MaintenanceBundle' => 'Ady\Bundle\MaintenanceBundle'],
             'kernel.cache_dir' => sys_get_temp_dir(),
             'kernel.environment' => 'dev',
             'kernel.root_dir' => __DIR__.'/../../../../', // src dir

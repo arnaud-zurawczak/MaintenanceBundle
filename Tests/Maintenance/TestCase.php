@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
+namespace Ady\Bundle\MaintenanceBundle\Tests\Maintenance;
 
 /**
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>

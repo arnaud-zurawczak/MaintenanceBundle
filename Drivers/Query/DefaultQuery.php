@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers\Query;
+namespace Ady\Bundle\MaintenanceBundle\Drivers\Query;
 
 use Doctrine\ORM\EntityManager;
 
@@ -16,7 +16,7 @@ class DefaultQuery extends PdoQuery
      */
     protected $em;
 
-    const NAME_TABLE = 'lexik_maintenance';
+    const NAME_TABLE = 'ady_maintenance';
 
     /**
      * @param EntityManager $em Entity Manager

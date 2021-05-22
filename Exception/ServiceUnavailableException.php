@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Exception;
+namespace Ady\Bundle\MaintenanceBundle\Exception;
 
 use Symfony\Component\HttpKernel\Exception\HttpException;
 

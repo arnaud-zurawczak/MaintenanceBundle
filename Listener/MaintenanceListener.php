@@ -1,9 +1,9 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Listener;
+namespace Ady\Bundle\MaintenanceBundle\Listener;
 
-use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
-use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
+use Ady\Bundle\MaintenanceBundle\Drivers\DriverFactory;
+use Ady\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;

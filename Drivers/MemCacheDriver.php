@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
 /**
  * Class to handle a memcache driver.
@@ -95,7 +95,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function getMessageLock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_lock_memc' : 'lexik_maintenance.not_success_lock';
+        $key = $resultTest ? 'ady_maintenance.success_lock_memc' : 'ady_maintenance.not_success_lock';
 
         return $this->translator->trans($key, [], 'maintenance');
     }
@@ -105,7 +105,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function getMessageUnlock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
+        $key = $resultTest ? 'ady_maintenance.success_unlock' : 'ady_maintenance.not_success_unlock';
 
         return $this->translator->trans($key, [], 'maintenance');
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Command;
+namespace Ady\Bundle\MaintenanceBundle\Command;
 
-use Lexik\Bundle\MaintenanceBundle\Drivers\AbstractDriver;
-use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
-use Lexik\Bundle\MaintenanceBundle\Drivers\DriverTtlInterface;
+use Ady\Bundle\MaintenanceBundle\Drivers\AbstractDriver;
+use Ady\Bundle\MaintenanceBundle\Drivers\DriverFactory;
+use Ady\Bundle\MaintenanceBundle\Drivers\DriverTtlInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,7 +39,7 @@ class DriverLockCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('lexik:maintenance:lock')
+            ->setName('ady:maintenance:lock')
             ->setDescription('Lock access to the site while maintenance...')
             ->addArgument('ttl', InputArgument::OPTIONAL, 'Overwrite time to life from your configuration, doesn\'t work with file or shm driver. Time in seconds.')
             ->addOption('no-interaction', 'n', InputOption::VALUE_OPTIONAL, 'You can execute the lock without a warning message which you need to interact');

@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\DependencyInjection;
+namespace Ady\Bundle\MaintenanceBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -19,7 +19,7 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('lexik_maintenance');
+        $treeBuilder = new TreeBuilder('ady_maintenance');
 
         $treeBuilder->getRootNode()
             ->addDefaultsIfNotSet()

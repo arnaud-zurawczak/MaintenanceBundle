@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
 /**
  * Class to handle a shared memory driver.
@@ -111,7 +111,7 @@ class ShmDriver extends AbstractDriver
      */
     public function getMessageLock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_lock_shm' : 'lexik_maintenance.not_success_lock';
+        $key = $resultTest ? 'ady_maintenance.success_lock_shm' : 'ady_maintenance.not_success_lock';
 
         return $this->translator->trans($key, [], 'maintenance');
     }
@@ -121,7 +121,7 @@ class ShmDriver extends AbstractDriver
      */
     public function getMessageUnlock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
+        $key = $resultTest ? 'ady_maintenance.success_unlock' : 'ady_maintenance.not_success_unlock';
 
         return $this->translator->trans($key, [], 'maintenance');
     }

@@ -1,10 +1,10 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DefaultQuery;
-use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
+use Ady\Bundle\MaintenanceBundle\Drivers\Query\DefaultQuery;
+use Ady\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
 
 /**
  * Class driver for handle database.
@@ -128,7 +128,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function getMessageLock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_lock_database' : 'lexik_maintenance.not_success_lock';
+        $key = $resultTest ? 'ady_maintenance.success_lock_database' : 'ady_maintenance.not_success_lock';
 
         return $this->translator->trans($key, [], 'maintenance');
     }
@@ -138,7 +138,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function getMessageUnlock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
+        $key = $resultTest ? 'ady_maintenance.success_unlock' : 'ady_maintenance.not_success_unlock';
 
         return $this->translator->trans($key, [], 'maintenance');
     }

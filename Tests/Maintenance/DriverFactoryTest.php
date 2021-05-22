@@ -1,10 +1,10 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
+namespace Ady\Bundle\MaintenanceBundle\Tests\Maintenance;
 
-use Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver;
-use Lexik\Bundle\MaintenanceBundle\Drivers\DriverFactory;
-use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
+use Ady\Bundle\MaintenanceBundle\Drivers\DatabaseDriver;
+use Ady\Bundle\MaintenanceBundle\Drivers\DriverFactory;
+use Ady\Bundle\MaintenanceBundle\Drivers\FileDriver;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -28,7 +28,7 @@ class DriverFactoryTest extends \PHPUnit\Framework\TestCase
         $this->container = $this->initContainer();
 
         $this->factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $driverOptions);
-        $this->container->set('lexik_maintenance.driver.factory', $this->factory);
+        $this->container->set('ady_maintenance.driver.factory', $this->factory);
     }
 
     protected function tearDown(): void
@@ -54,7 +54,7 @@ class DriverFactoryTest extends \PHPUnit\Framework\TestCase
 
         $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $driverOptions);
 
-        $this->container->set('lexik_maintenance.driver.factory', $factory);
+        $this->container->set('ady_maintenance.driver.factory', $factory);
 
         $this->assertInstanceOf(DatabaseDriver::class, $factory->getDriver());
     }
@@ -64,7 +64,7 @@ class DriverFactoryTest extends \PHPUnit\Framework\TestCase
         $driverOptions = ['class' => '\Unknown', 'options' => null];
 
         $factory = new DriverFactory($this->getDatabaseDriver(), $this->getTranslator(), $driverOptions);
-        $this->container->set('lexik_maintenance.driver.factory', $factory);
+        $this->container->set('ady_maintenance.driver.factory', $factory);
 
         $this->expectException(\ErrorException::class);
         $factory->getDriver();
@@ -74,7 +74,7 @@ class DriverFactoryTest extends \PHPUnit\Framework\TestCase
     {
         return new ContainerBuilder(new ParameterBag([
             'kernel.debug' => false,
-            'kernel.bundles' => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
+            'kernel.bundles' => ['MaintenanceBundle' => 'Ady\Bundle\MaintenanceBundle'],
             'kernel.cache_dir' => sys_get_temp_dir(),
             'kernel.environment' => 'dev',
             'kernel.root_dir' => __DIR__.'/../../../../', // src dir

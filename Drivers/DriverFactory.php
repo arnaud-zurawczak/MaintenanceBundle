@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
 use Symfony\Contracts\Translation\TranslatorInterface;
 
@@ -26,7 +26,7 @@ class DriverFactory
      */
     protected $translator;
 
-    const DATABASE_DRIVER = 'Lexik\Bundle\MaintenanceBundle\Drivers\DatabaseDriver';
+    const DATABASE_DRIVER = 'Ady\Bundle\MaintenanceBundle\Drivers\DatabaseDriver';
 
     /**
      * Constructor driver factory.

@@ -1,9 +1,9 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Tests\EventListener;
+namespace Ady\Bundle\MaintenanceBundle\Tests\EventListener;
 
-use Lexik\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
-use Lexik\Bundle\MaintenanceBundle\Listener\MaintenanceListener;
+use Ady\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
+use Ady\Bundle\MaintenanceBundle\Listener\MaintenanceListener;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class MaintenanceListenerTestWrapper extends MaintenanceListener

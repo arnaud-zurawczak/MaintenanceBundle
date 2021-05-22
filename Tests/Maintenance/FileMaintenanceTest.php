@@ -1,8 +1,8 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Tests\Maintenance;
+namespace Ady\Bundle\MaintenanceBundle\Tests\Maintenance;
 
-use Lexik\Bundle\MaintenanceBundle\Drivers\FileDriver;
+use Ady\Bundle\MaintenanceBundle\Drivers\FileDriver;
 use PHPUnit\Framework\MockObject\MockObject;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -106,12 +106,12 @@ class FileMaintenanceTest extends TestCase
         $fileM->lock();
 
         // lock
-        $this->assertEquals('lexik_maintenance.success_lock_file', $fileM->getMessageLock(true));
-        $this->assertEquals('lexik_maintenance.not_success_lock', $fileM->getMessageLock(false));
+        $this->assertEquals('ady_maintenance.success_lock_file', $fileM->getMessageLock(true));
+        $this->assertEquals('ady_maintenance.not_success_lock', $fileM->getMessageLock(false));
 
         // unlock
-        $this->assertEquals('lexik_maintenance.success_unlock', $fileM->getMessageUnlock(true));
-        $this->assertEquals('lexik_maintenance.not_success_unlock', $fileM->getMessageUnlock(false));
+        $this->assertEquals('ady_maintenance.success_unlock', $fileM->getMessageUnlock(true));
+        $this->assertEquals('ady_maintenance.not_success_unlock', $fileM->getMessageUnlock(false));
     }
 
     public static function tearDownAfterClass(): void
@@ -123,7 +123,7 @@ class FileMaintenanceTest extends TestCase
     {
         return new ContainerBuilder(new ParameterBag([
             'kernel.debug' => false,
-            'kernel.bundles' => ['MaintenanceBundle' => 'Lexik\Bundle\MaintenanceBundle'],
+            'kernel.bundles' => ['MaintenanceBundle' => 'Ady\Bundle\MaintenanceBundle'],
             'kernel.cache_dir' => sys_get_temp_dir(),
             'kernel.environment' => 'dev',
             'kernel.root_dir' => __DIR__.'/../../../../', // src dir

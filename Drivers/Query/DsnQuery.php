@@ -1,6 +1,6 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers\Query;
+namespace Ady\Bundle\MaintenanceBundle\Drivers\Query;
 
 /**
  * Class for handle database with a dsn connection.
