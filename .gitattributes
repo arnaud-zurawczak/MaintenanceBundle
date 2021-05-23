@@ -7,3 +7,4 @@ Tests/ export-ignore
 docker-compose.yaml.dist export-ignore
 Dockerfile export-ignore
 phpunit.xml.dist export-ignore
+phpunit.php80.xml export-ignore
