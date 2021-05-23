@@ -1,4 +1,4 @@
-<div style="text-align: center;">
+<div align="center">
 <h2>AdyMaintenanceBundle</h2>
 
 *This repository is forked from [LexikMaintenanceBundle](https://github.com/lexik/LexikMaintenanceBundle).*
