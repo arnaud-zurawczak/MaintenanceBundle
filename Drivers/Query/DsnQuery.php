@@ -21,7 +21,9 @@ class DsnQuery extends PdoQuery
 
             $db = new \PDO($this->options['dsn'], $this->options['user'], $this->options['password']);
             $this->db = $db;
-            $this->createTableQuery();
+            if (!isset($this->options['table_created']) || !$this->options['table_created']) {
+                $this->createTableQuery();
+            }
         }
 
         return $this->db;

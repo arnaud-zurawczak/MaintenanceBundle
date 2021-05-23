@@ -21,9 +21,10 @@ class DefaultQuery extends PdoQuery
     /**
      * @param EntityManager $em Entity Manager
      */
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, array $options = [])
     {
         $this->em = $em;
+        parent::__construct($options);
     }
 
     /**
@@ -34,7 +35,9 @@ class DefaultQuery extends PdoQuery
         if (null === $this->db) {
             $db = $this->em->getConnection();
             $this->db = $db;
-            $this->createTableQuery();
+            if (!isset($this->options['table_created']) || !$this->options['table_created']) {
+                $this->createTableQuery();
+            }
         }
 
         return $this->db;
