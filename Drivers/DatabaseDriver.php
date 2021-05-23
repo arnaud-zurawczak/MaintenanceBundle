@@ -1,15 +1,14 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
+use Ady\Bundle\MaintenanceBundle\Drivers\Query\DefaultQuery;
+use Ady\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DefaultQuery;
-use Lexik\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
 
 /**
- * Class driver for handle database
+ * Class driver for handle database.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
@@ -30,13 +29,12 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     protected $db;
 
     /**
-     *
      * @var PdoDriver
      */
     protected $pdoDriver;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param Registry $doctrine The registry
      */
@@ -46,7 +44,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     }
 
     /**
-     * Set options from configuration
+     * Set options from configuration.
      *
      * @param array $options Options
      */
@@ -56,12 +54,10 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
 
         if (isset($this->options['dsn'])) {
             $this->pdoDriver = new DsnQuery($this->options);
+        } elseif (isset($this->options['connection'])) {
+            $this->pdoDriver = new DefaultQuery($this->doctrine->getManager($this->options['connection']));
         } else {
-            if (isset($this->options['connection'])) {
-                $this->pdoDriver = new DefaultQuery($this->doctrine->getManager($this->options['connection']));
-            } else {
-                $this->pdoDriver = new DefaultQuery($this->doctrine->getManager());
-            }
+            $this->pdoDriver = new DefaultQuery($this->doctrine->getManager());
         }
     }
 
@@ -74,7 +70,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
 
         try {
             $ttl = null;
-            if (isset($this->options['ttl']) && $this->options['ttl'] !== 0) {
+            if (isset($this->options['ttl']) && 0 !== $this->options['ttl']) {
                 $now = new \Datetime('now');
                 $ttl = $this->options['ttl'];
                 $ttl = $now->modify(sprintf('+%s seconds', $ttl))->format('Y-m-d H:i:s');
@@ -132,9 +128,9 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function getMessageLock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_lock_database' : 'lexik_maintenance.not_success_lock';
+        $key = $resultTest ? 'ady_maintenance.success_lock_database' : 'ady_maintenance.not_success_lock';
 
-        return $this->translator->trans($key, array(), 'maintenance');
+        return $this->translator->trans($key, [], 'maintenance');
     }
 
     /**
@@ -142,9 +138,9 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
      */
     public function getMessageUnlock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
+        $key = $resultTest ? 'ady_maintenance.success_unlock' : 'ady_maintenance.not_success_unlock';
 
-        return $this->translator->trans($key, array(), 'maintenance');
+        return $this->translator->trans($key, [], 'maintenance');
     }
 
     /**

@@ -1,0 +1,43 @@
+services:
+  ady_maintenance.driver.database:
+    class: Ady\Bundle\MaintenanceBundle\Drivers\DatabaseDriver
+    arguments:
+      - '@?doctrine'
+
+  ady_maintenance.driver.factory:
+    class: Ady\Bundle\MaintenanceBundle\Drivers\DriverFactory
+    arguments:
+      - '@ady_maintenance.driver.database'
+      - '@translator'
+      - '%ady_maintenance.driver%'
+
+  ady_maintenance.listener:
+    class: Ady\Bundle\MaintenanceBundle\Listener\MaintenanceListener
+    tags:
+      - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+      - { name: kernel.event_listener, event: kernel.response, method: onKernelResponse }
+    arguments:
+      - '@ady_maintenance.driver.factory'
+      - '%ady_maintenance.authorized.path%'
+      - '%ady_maintenance.authorized.host%'
+      - '%ady_maintenance.authorized.ips%'
+      - '%ady_maintenance.authorized.query%'
+      - '%ady_maintenance.authorized.cookie%'
+      - '%ady_maintenance.authorized.route%'
+      - '%ady_maintenance.authorized.attributes%'
+      - '%ady_maintenance.response.http_code%'
+      - '%ady_maintenance.response.http_status%'
+      - '%ady_maintenance.response.exception_message%'
+      - '%kernel.debug%'
+
+  Ady\Bundle\MaintenanceBundle\Command\DriverLockCommand:
+    tags:
+      - 'console.command'
+    arguments:
+      - '@ady_maintenance.driver.factory'
+
+  Ady\Bundle\MaintenanceBundle\Command\DriverUnlockCommand:
+    tags:
+      - 'console.command'
+    arguments:
+      - '@ady_maintenance.driver.factory'

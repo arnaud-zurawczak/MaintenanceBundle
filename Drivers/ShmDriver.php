@@ -1,51 +1,49 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
 /**
- * Class to handle a shared memory driver
+ * Class to handle a shared memory driver.
  *
- * @package LexikMaintenanceBundle
  * @author  Audrius Karabanovas <audrius@karabanovas.net>
  */
 class ShmDriver extends AbstractDriver
 {
     /**
-     * Value store in shm
+     * Value store in shm.
      *
      * @var string
      */
-    const VALUE_TO_STORE = "maintenance";
+    const VALUE_TO_STORE = 'maintenance';
 
     /**
-     * Variable key
+     * Variable key.
      *
-     * @var integer
+     * @var int
      */
     const VARIABLE_KEY = 1;
 
     /**
-     * The key store in shm
+     * The key store in shm.
      *
      * @var string keyName
      */
     protected $keyName;
 
-
     /**
-     * Shared memory block ID
+     * Shared memory block ID.
      *
      * @var resource
      */
     protected $shmId;
 
     /**
-     * Constructor shmDriver
+     * Constructor shmDriver.
      *
      * @param Translator $translator Translator service
      * @param array      $options    Options driver
      */
-    public function __construct($translator, array $options = array())
+    public function __construct($translator, array $options = [])
     {
         parent::__construct($translator, $options);
 
@@ -58,7 +56,7 @@ class ShmDriver extends AbstractDriver
     }
 
     /**
-     * Detach from shared memory
+     * Detach from shared memory.
      */
     public function __destruct()
     {
@@ -97,11 +95,12 @@ class ShmDriver extends AbstractDriver
     public function isExists()
     {
         if ($this->shmId) {
-            if (!shm_has_var($this->shmId, self::VARIABLE_KEY) ) {
+            if (!shm_has_var($this->shmId, self::VARIABLE_KEY)) {
                 return false;
             }
             $data = shm_get_var($this->shmId, self::VARIABLE_KEY);
-            return ($data == self::VALUE_TO_STORE);
+
+            return self::VALUE_TO_STORE == $data;
         }
 
         return false;
@@ -112,9 +111,9 @@ class ShmDriver extends AbstractDriver
      */
     public function getMessageLock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_lock_shm' : 'lexik_maintenance.not_success_lock';
+        $key = $resultTest ? 'ady_maintenance.success_lock_shm' : 'ady_maintenance.not_success_lock';
 
-        return $this->translator->trans($key, array(), 'maintenance');
+        return $this->translator->trans($key, [], 'maintenance');
     }
 
     /**
@@ -122,8 +121,8 @@ class ShmDriver extends AbstractDriver
      */
     public function getMessageUnlock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
+        $key = $resultTest ? 'ady_maintenance.success_unlock' : 'ady_maintenance.not_success_unlock';
 
-        return $this->translator->trans($key, array(), 'maintenance');
+        return $this->translator->trans($key, [], 'maintenance');
     }
 }

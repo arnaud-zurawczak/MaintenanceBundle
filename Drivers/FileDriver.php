@@ -1,21 +1,21 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
 class FileDriver extends AbstractDriver
 {
     protected $filePath;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param array $options    Options driver
+     * @param array $options Options driver
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         parent::__construct($options);
 
-        if ( ! isset($options['file_path'])) {
+        if (!isset($options['file_path'])) {
             throw new \InvalidArgumentException('$options[\'file_path\'] cannot be defined if Driver File configuration is used');
         }
         if (null !== $options) {
@@ -30,7 +30,7 @@ class FileDriver extends AbstractDriver
      */
     protected function createLock()
     {
-        return (fopen($this->filePath, 'w+'));
+        return fopen($this->filePath, 'w+');
     }
 
     /**
@@ -50,6 +50,7 @@ class FileDriver extends AbstractDriver
             if (isset($this->options['ttl']) && is_numeric($this->options['ttl'])) {
                 $this->isEndTime($this->options['ttl']);
             }
+
             return true;
         } else {
             return false;
@@ -57,16 +58,16 @@ class FileDriver extends AbstractDriver
     }
 
     /**
-     * Test if time to life is expired
+     * Test if time to life is expired.
      *
-     * @param integer $timeTtl The ttl value
+     * @param int $timeTtl The ttl value
      *
-     * @return boolean
+     * @return bool
      */
     public function isEndTime($timeTtl)
     {
         $now = new \DateTime('now');
-        $accessTime = date("Y-m-d H:i:s.", filemtime($this->filePath));
+        $accessTime = date('Y-m-d H:i:s.', filemtime($this->filePath));
         $accessTime = new \DateTime($accessTime);
         $accessTime->modify(sprintf('+%s seconds', $timeTtl));
 
@@ -82,9 +83,9 @@ class FileDriver extends AbstractDriver
      */
     public function getMessageLock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_lock_file' : 'lexik_maintenance.not_success_lock';
+        $key = $resultTest ? 'ady_maintenance.success_lock_file' : 'ady_maintenance.not_success_lock';
 
-        return $this->translator->trans($key, array(), 'maintenance');
+        return $this->translator->trans($key, [], 'maintenance');
     }
 
     /**
@@ -92,8 +93,8 @@ class FileDriver extends AbstractDriver
      */
     public function getMessageUnlock($resultTest)
     {
-        $key = $resultTest ? 'lexik_maintenance.success_unlock' : 'lexik_maintenance.not_success_unlock';
+        $key = $resultTest ? 'ady_maintenance.success_unlock' : 'ady_maintenance.not_success_unlock';
 
-        return $this->translator->trans($key, array(), 'maintenance');
+        return $this->translator->trans($key, [], 'maintenance');
     }
 }

@@ -1,0 +1,55 @@
+cache:
+  key:
+    files:
+      - composer.lock
+  paths:
+    - $HOME/.composer/cache
+
+
+before_script:
+  - bash ci/docker_install.sh > /dev/null
+  - curl -sS https://getcomposer.org/installer | php
+  - mv composer.phar /usr/local/bin/composer
+  - composer self-update
+  - if [ "$SYMFONY_VERSION" != "" ]; then composer require --dev symfony/symfony:${SYMFONY_VERSION} --no-update; fi
+  - composer update $COMPOSER_FLAGS
+
+test:7.2:
+  image: php:7.2
+  variables:
+    SYMFONY_VERSION: '4.*'
+    SYMFONY_DEPRECATIONS_HELPER: 'max[direct]=0'
+    XDEBUG: '2.8.1'
+  script:
+    - ./vendor/bin/phpunit --colors=never
+    - ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff
+
+test:7.3:
+  image: php:7.3
+  variables:
+    SYMFONY_VERSION: '5.*'
+    SYMFONY_DEPRECATIONS_HELPER: 'max[direct]=0'
+    XDEBUG: '2.8.1'
+  script:
+    - ./vendor/bin/phpunit --colors=never
+    - ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff
+
+test:7.4:
+  image: php:7.4
+  variables:
+    SYMFONY_VERSION: '5.*'
+    SYMFONY_DEPRECATIONS_HELPER: 'max[direct]=0'
+    XDEBUG: '2.8.1'
+  script:
+    - ./vendor/bin/phpunit --colors=never
+    - ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff
+
+test:8.0:
+  image: php:8.0
+  variables:
+    SYMFONY_VERSION: '5.*'
+    SYMFONY_DEPRECATIONS_HELPER: 'max[direct]=0'
+    XDEBUG: '3.0.0'
+  script:
+    - ./vendor/bin/phpunit --colors=never -c phpunit.php80.xml
+    - ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff

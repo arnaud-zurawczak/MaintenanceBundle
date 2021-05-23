@@ -1,33 +1,41 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Command;
+namespace Ady\Bundle\MaintenanceBundle\Command;
 
+use Ady\Bundle\MaintenanceBundle\Drivers\DriverFactory;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
- * Create an unlock action
+ * Create an unlock action.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
-class DriverUnlockCommand extends ContainerAwareCommand
+class DriverUnlockCommand extends Command
 {
+    /**
+     * @var DriverFactory
+     */
+    private $driverFactory;
+
+    public function __construct(DriverFactory $driverFactory)
+    {
+        parent::__construct();
+        $this->driverFactory = $driverFactory;
+    }
+
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
         $this
-            ->setName('lexik:maintenance:unlock')
+            ->setName('ady:maintenance:unlock')
             ->setDescription('Unlock access to the site while maintenance...')
-            ->setHelp(<<<EOT
-    You can execute the unlock without a warning message which you need to interact with:
-
-    <info>%command.full_name% --no-interaction</info>
-EOT
-                );
+            ->addOption('no-interaction', 'n', InputOption::VALUE_OPTIONAL, 'You can execute the unlock without a warning message which you need to interact');
     }
 
     /**
@@ -39,7 +47,7 @@ EOT
             return;
         }
 
-        $driver = $this->getContainer()->get('lexik_maintenance.driver.factory')->getDriver();
+        $driver = $this->driverFactory->getDriver();
 
         $unlockMessage = $driver->getMessageUnlock($driver->unlock());
 
@@ -47,23 +55,21 @@ EOT
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
      * @return bool
      */
     protected function confirmUnlock(InputInterface $input, OutputInterface $output)
     {
         $formatter = $this->getHelperSet()->get('formatter');
 
-        if ($input->getOption('no-interaction', false)) {
+        if ($input->getOption('no-interaction')) {
             $confirmation = true;
         } else {
             // confirm
-            $output->writeln(array(
+            $output->writeln([
                 '',
                 $formatter->formatBlock('You are about to unlock your server.', 'bg=green;fg=white', true),
                 '',
-            ));
+            ]);
 
             $confirmation = $this->askConfirmation(
                 'WARNING! Are you sure you wish to continue? (y/n) ',
@@ -84,17 +90,17 @@ EOT
      * but use the ConfirmationQuestion when available.
      *
      * @param $question
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     *
      * @return mixed
      */
-    protected function askConfirmation($question, InputInterface $input, OutputInterface $output) {
+    protected function askConfirmation($question, InputInterface $input, OutputInterface $output)
+    {
         if (!$this->getHelperSet()->has('question')) {
             return $this->getHelper('dialog')
-                ->askConfirmation($output, '<question>' . $question . '</question>', 'y');
+                ->askConfirmation($output, '<question>'.$question.'</question>', 'y');
         }
 
         return $this->getHelper('question')
-            ->ask($input, $output, new \Symfony\Component\Console\Question\ConfirmationQuestion($question));
+            ->ask($input, $output, new ConfirmationQuestion($question));
     }
 }

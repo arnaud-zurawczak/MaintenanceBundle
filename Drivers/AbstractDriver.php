@@ -1,13 +1,12 @@
 <?php
 
-namespace Lexik\Bundle\MaintenanceBundle\Drivers;
+namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
-use Symfony\Component\Translation\TranslatorInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
- * Abstract class for drivers
+ * Abstract class for drivers.
  *
- * @package LexikMaintenanceBundle
  * @author  Gilles Gauthier <g.gauthier@lexik.fr>
  */
 abstract class AbstractDriver
@@ -23,58 +22,58 @@ abstract class AbstractDriver
     protected $translator;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param array $options Array of options
      */
-    public function __construct(array $options = array())
+    public function __construct(array $options = [])
     {
         $this->options = $options;
     }
 
     /**
-     * Test if object exists
+     * Test if object exists.
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function isExists();
 
     /**
-     * Result of creation of lock
+     * Result of creation of lock.
      *
-     * @return boolean
+     * @return bool
      */
     abstract protected function createLock();
 
     /**
-     * Result of create unlock
+     * Result of create unlock.
      *
-     * @return boolean
+     * @return bool
      */
     abstract protected function createUnlock();
 
     /**
-     * The feedback message
+     * The feedback message.
      *
-     * @param boolean $resultTest The result of lock
+     * @param bool $resultTest The result of lock
      *
      * @return string
      */
     abstract public function getMessageLock($resultTest);
 
     /**
-     * The feedback message
+     * The feedback message.
      *
-     * @param boolean $resultTest The result of unlock
+     * @param bool $resultTest The result of unlock
      *
      * @return string
      */
     abstract public function getMessageUnlock($resultTest);
 
     /**
-     * The response of lock
+     * The response of lock.
      *
-     * @return boolean
+     * @return bool
      */
     public function lock()
     {
@@ -86,9 +85,9 @@ abstract class AbstractDriver
     }
 
     /**
-     * The response of unlock
+     * The response of unlock.
      *
-     * @return boolean
+     * @return bool
      */
     public function unlock()
     {
@@ -100,17 +99,17 @@ abstract class AbstractDriver
     }
 
     /**
-     * the choice of the driver to less pass or not the user
+     * the choice of the driver to less pass or not the user.
      *
-     * @return boolean
+     * @return bool
      */
     public function decide()
     {
-        return ($this->isExists());
+        return $this->isExists();
     }
 
     /**
-     * Options of driver
+     * Options of driver.
      *
      * @return array
      */
@@ -120,9 +119,7 @@ abstract class AbstractDriver
     }
 
     /**
-     * Set translatorlator
-     *
-     * @param TranslatorInterface $translator
+     * Set translatorlator.
      */
     public function setTranslator(TranslatorInterface $translator)
     {
