@@ -41,8 +41,7 @@ class DriverLockCommand extends Command
         $this
             ->setName('ady:maintenance:lock')
             ->setDescription('Lock access to the site while maintenance...')
-            ->addArgument('ttl', InputArgument::OPTIONAL, 'Overwrite time to life from your configuration, doesn\'t work with file or shm driver. Time in seconds.')
-            ->addOption('no-interaction', 'n', InputOption::VALUE_OPTIONAL, 'You can execute the lock without a warning message which you need to interact');
+            ->addArgument('ttl', InputArgument::OPTIONAL, 'Overwrite time to life from your configuration, doesn\'t work with file or shm driver. Time in seconds.');
     }
 
     /**

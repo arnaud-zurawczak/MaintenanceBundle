@@ -34,8 +34,7 @@ class DriverUnlockCommand extends Command
     {
         $this
             ->setName('ady:maintenance:unlock')
-            ->setDescription('Unlock access to the site while maintenance...')
-            ->addOption('no-interaction', 'n', InputOption::VALUE_OPTIONAL, 'You can execute the unlock without a warning message which you need to interact');
+            ->setDescription('Unlock access to the site while maintenance...');
     }
 
     /**
