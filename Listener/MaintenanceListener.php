@@ -7,7 +7,6 @@ use Ady\Bundle\MaintenanceBundle\Exception\ServiceUnavailableException;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
-use Symfony\Component\HttpKernel\HttpKernelInterface;
 
 /**
  * Listener to decide if user can access to the site.
@@ -22,13 +21,6 @@ class MaintenanceListener
      * @var DriverFactory
      */
     protected $driverFactory;
-
-    /**
-     * Authorized data.
-     *
-     * @var array
-     */
-    protected $authorizedIps;
 
     /**
      * @var string|null
@@ -76,7 +68,7 @@ class MaintenanceListener
     protected $http_status;
 
     /**
-     * @var string|null
+     * @var string
      */
     protected $http_exception_message;
 
@@ -109,7 +101,7 @@ class MaintenanceListener
      * @param array         $attributes             Attributes
      * @param int|null      $http_code              http status code for response
      * @param string|null   $http_status            http status message for response
-     * @param string|null   $http_exception_message http response page exception message
+     * @param string        $http_exception_message http response page exception message
      * @param bool          $debug                  debug mode
      */
     public function __construct(
@@ -123,7 +115,7 @@ class MaintenanceListener
         array $attributes = [],
         int $http_code = null,
         string $http_status = null,
-        string $http_exception_message = null,
+        string $http_exception_message = '',
         bool $debug = false
     ) {
         $this->driverFactory = $driverFactory;
@@ -147,8 +139,14 @@ class MaintenanceListener
      */
     public function onKernelRequest(RequestEvent $event)
     {
-        if (!$event->isMasterRequest()) {
-            return;
+        if (method_exists($event, 'isMainRequest')) {
+            if (!$event->isMainRequest()) {
+                return;
+            }
+        } else {
+            if (!$event->isMasterRequest()) {
+                return;
+            }
         }
 
         $request = $event->getRequest();
@@ -177,11 +175,11 @@ class MaintenanceListener
             }
         }
 
-        if (null !== $this->path && !empty($this->path) && preg_match('{'.$this->path.'}', rawurldecode($request->getPathInfo()))) {
+        if (!empty($this->path) && preg_match('{'.$this->path.'}', rawurldecode($request->getPathInfo()))) {
             return;
         }
 
-        if (null !== $this->host && !empty($this->host) && preg_match('{'.$this->host.'}i', $request->getHost())) {
+        if (!empty($this->host) && preg_match('{'.$this->host.'}i', $request->getHost())) {
             return;
         }
 
@@ -197,7 +195,7 @@ class MaintenanceListener
         // Get driver class defined in your configuration
         $driver = $this->driverFactory->getDriver();
 
-        if ($driver->decide() && HttpKernelInterface::MASTER_REQUEST === $event->getRequestType()) {
+        if ($driver->decide()) {
             $this->handleResponse = true;
             throw new ServiceUnavailableException($this->http_exception_message);
         }
