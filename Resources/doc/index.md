@@ -31,8 +31,7 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
 
             # File driver
             class: '\Ady\Bundle\MaintenanceBundle\Drivers\FileDriver'                  # class for file driver
-            options: {file_path: %kernel.project_dir%/../app/cache/lock}               # file_path is the complete path for create the file (Symfony < 3.0)
-            options: {file_path: %kernel.project_dir%/../var/cache/lock}               # file_path is the complete path for create the file (Symfony >= 3.0)
+            options: {file_path: '%kernel.project_dir%/../var/cache/lock'}             # file_path is the complete path for create the file
 
             # Shared memory driver
             class: '\Ady\Bundle\MaintenanceBundle\Drivers\ShmDriver'                   # class for shared memory driver
@@ -45,12 +44,14 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
             class: 'Ady\Bundle\MaintenanceBundle\Drivers\DatabaseDriver'               # class for database driver
 
             # Option 1 : for doctrine
-            options: {connection: custom}                                              # Optional. You can choice an other connection. Without option it's the doctrine default connection who will be used
+            options: {connection: custom, table: maintenance}                          # Optional. You can choose an other connection and/or a custom table name.
+                                                                                       # Default connection is Doctrine.
+                                                                                       # Default table name is "ady_maintenance"
 
             # Option 2 : for dsn, you must have a column ttl type datetime in your table.
             options: {dsn: "mysql:dbname=maintenance;host:localhost", table: maintenance, user: root, password: root}  # the dsn configuration, name of table, user/password
 
-            # Option 3 : after bundle installation
+            # Recommanded : after bundle installation (works with options 1 and 2)
             options: {table_created: true}                                              # Optional. After installation and after table creation, set this option to true to avoid
                                                                                         # the unnecessary query (create table if exists) at every request.
         
@@ -67,7 +68,7 @@ There are two commands:
 
     ady:maintenance:lock
 
-This command will enable the maintenance according with your configuration. You can pass the time to life (in seconds) of the maintenance in parameter, ``this doesn't works with file driver``.
+This command will enable the maintenance according to your configuration. You can pass the time to life (in seconds) of the maintenance in parameter, ``this doesn't works with file driver``.
 
     ady:maintenance:unlock
 
@@ -88,7 +89,7 @@ Custom error page 503
 ---------------------
 
 In the listener, an exception is thrown when website is under maintenance. This exception is a 'This exception is a 'HttpException' (status 503), to custom your error page
- you need to create a error503.html.twig (if you use twig) in:
+ you need to create an error503.html.twig (if you use twig) in:
     app/Resources/TwigBundle/views/Exception
 
 #### Important

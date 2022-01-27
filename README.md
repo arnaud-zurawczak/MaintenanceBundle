@@ -35,4 +35,4 @@ Contributing
 
 If you have any issue, please submit it on:
 - [GitLab](https://gitlab.com/adynemo/maintenance-bundle/-/issues/new)
-- [GitHub](https://github.com/ad0726/MaintenanceBundle/issues/new)
+- [GitHub](https://github.com/adynemo/MaintenanceBundle/issues/new)
