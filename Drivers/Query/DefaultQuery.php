@@ -79,10 +79,10 @@ class DefaultQuery extends PdoQuery
         return $this->exec(
             $db,
             sprintf(
-                'INSERT INTO %s (ttl) VALUES (:ttl)',
-                self::NAME_TABLE
+                'INSERT INTO %s (ttl) VALUES (?)',
+                $this->options['table']
             ),
-            [':ttl' => $ttl]
+            [$ttl]
         );
     }
 }

@@ -63,10 +63,10 @@ class DsnQuery extends PdoQuery
         return $this->exec(
             $db,
             sprintf(
-                'INSERT INTO %s (ttl) VALUES (:ttl)',
+                'INSERT INTO %s (ttl) VALUES (?)',
                 $this->options['table']
             ),
-            [':ttl' => $ttl]
+            [$ttl]
         );
     }
 }
