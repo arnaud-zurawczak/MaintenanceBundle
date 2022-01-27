@@ -24,6 +24,9 @@ class DefaultQuery extends PdoQuery
     public function __construct(EntityManager $em, array $options = [])
     {
         $this->em = $em;
+        if (!isset($options['table']) || '' === $options['table']) {
+            $options['table'] = self::NAME_TABLE;
+        }
         parent::__construct($options);
     }
 
@@ -51,7 +54,7 @@ class DefaultQuery extends PdoQuery
         $type = 'mysql' != $this->em->getConnection()->getDatabasePlatform()->getName() ? 'timestamp' : 'datetime';
 
         $this->db->exec(
-            sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL)', self::NAME_TABLE, $type)
+            sprintf('CREATE TABLE IF NOT EXISTS %s (ttl %s DEFAULT NULL)', $this->options['table'], $type)
         );
     }
 
@@ -60,7 +63,7 @@ class DefaultQuery extends PdoQuery
      */
     public function deleteQuery($db)
     {
-        return $this->exec($db, sprintf('DELETE FROM %s', self::NAME_TABLE));
+        return $this->exec($db, sprintf('DELETE FROM %s', $this->options['table']));
     }
 
     /**
@@ -68,7 +71,7 @@ class DefaultQuery extends PdoQuery
      */
     public function selectQuery($db)
     {
-        return $this->fetch($db, sprintf('SELECT ttl FROM %s', self::NAME_TABLE));
+        return $this->fetch($db, sprintf('SELECT ttl FROM %s', $this->options['table']));
     }
 
     /**
