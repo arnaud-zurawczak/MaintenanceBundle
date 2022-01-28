@@ -24,7 +24,7 @@ class DefaultQuery extends PdoQuery
     public function __construct(EntityManager $em, array $options = [])
     {
         $this->em = $em;
-        if (!isset($options['table']) || '' === $options['table']) {
+        if (empty($options['table'])) {
             $options['table'] = self::NAME_TABLE;
         }
         parent::__construct($options);
