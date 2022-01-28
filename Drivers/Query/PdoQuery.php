@@ -152,7 +152,7 @@ abstract class PdoQuery
 
     /**
      * @param Statement $stmt
-     * @param array $args
+     *
      * @return void
      */
     private function bindValues($stmt, array $args)
@@ -160,7 +160,7 @@ abstract class PdoQuery
         foreach ($args as $arg => $val) {
             if (is_null($val)) {
                 $type = \PDO::PARAM_NULL;
-            } else if (is_int($val)) {
+            } elseif (is_int($val)) {
                 $type = \PDO::PARAM_INT;
             } else {
                 $type = \PDO::PARAM_STR;
