@@ -86,11 +86,13 @@ abstract class PdoQuery
     {
         $stmt = $this->prepareStatement($db, $query);
 
-        foreach ($args as $arg => $val) {
-            $stmt->bindValue($arg, $val, is_int($val) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
+        if (false === $stmt) {
+            throw new \RuntimeException('The database cannot successfully prepare the statement');
         }
 
-        $success = $stmt->execute();
+        $this->bindValues($stmt, $args);
+
+        $success = $stmt->execute($args);
 
         if (!$success) {
             throw new \RuntimeException(sprintf('Error executing query "%s"', $query));
@@ -141,12 +143,30 @@ abstract class PdoQuery
             throw new \RuntimeException('The database cannot successfully prepare the statement');
         }
 
-        foreach ($args as $arg => $val) {
-            $stmt->bindValue($arg, $val, is_int($val) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
-        }
+        $this->bindValues($stmt, $args);
 
         $stmt->execute();
 
         return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
+
+    /**
+     * @param Statement $stmt
+     *
+     * @return void
+     */
+    private function bindValues($stmt, array $args)
+    {
+        foreach ($args as $arg => $val) {
+            if (is_null($val)) {
+                $type = \PDO::PARAM_NULL;
+            } elseif (is_int($val)) {
+                $type = \PDO::PARAM_INT;
+            } else {
+                $type = \PDO::PARAM_STR;
+            }
+
+            $stmt->bindValue($arg, $val, $type);
+        }
     }
 }

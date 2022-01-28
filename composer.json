@@ -38,10 +38,5 @@
         "psr-4": {
             "Ady\\Bundle\\MaintenanceBundle\\": ""
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "2.0.x-dev"
-        }
     }
 }

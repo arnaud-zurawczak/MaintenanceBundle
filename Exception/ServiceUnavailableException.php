@@ -18,7 +18,7 @@ class ServiceUnavailableException extends HttpException
      * @param \Exception $previous The previous exception
      * @param int        $code     The internal exception code
      */
-    public function __construct($message = null, \Exception $previous = null, $code = 0)
+    public function __construct($message = '', \Exception $previous = null, $code = 0)
     {
         parent::__construct(503, $message, $previous, [], $code);
     }
