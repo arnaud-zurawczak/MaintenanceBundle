@@ -92,7 +92,7 @@ abstract class PdoQuery
 
         $this->bindValues($stmt, $args);
 
-        $success = $stmt->execute($args);
+        $success = $stmt->execute();
 
         if (!$success) {
             throw new \RuntimeException(sprintf('Error executing query "%s"', $query));
