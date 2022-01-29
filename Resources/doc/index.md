@@ -51,7 +51,7 @@ The ttl (time to life) option is optional everywhere, it is used to indicate the
             # Option 2 : for dsn, you must have a column ttl type datetime in your table.
             options: {dsn: "mysql:dbname=maintenance;host:localhost", table: maintenance, user: root, password: root}  # the dsn configuration, name of table, user/password
 
-            # Recommanded : after bundle installation (works with options 1 and 2)
+            # Recommended : after bundle installation (works with options 1 and 2)
             options: {table_created: true}                                              # Optional. After installation and after table creation, set this option to true to avoid
                                                                                         # the unnecessary query (create table if exists) at every request.
         
