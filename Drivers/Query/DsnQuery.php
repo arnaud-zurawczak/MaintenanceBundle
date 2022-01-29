@@ -66,7 +66,7 @@ class DsnQuery extends PdoQuery
                 'INSERT INTO %s (ttl) VALUES (?)',
                 $this->options['table']
             ),
-            [$ttl]
+            [1 => $ttl]
         );
     }
 }
