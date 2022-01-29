@@ -158,15 +158,7 @@ abstract class PdoQuery
     private function bindValues($stmt, array $args)
     {
         foreach ($args as $arg => $val) {
-            if (is_null($val)) {
-                $type = \PDO::PARAM_NULL;
-            } elseif (is_int($val)) {
-                $type = \PDO::PARAM_INT;
-            } else {
-                $type = \PDO::PARAM_STR;
-            }
-
-            $stmt->bindValue($arg, $val, $type);
+            $stmt->bindValue($arg, $val, is_int($val) ? \PDO::PARAM_INT : \PDO::PARAM_STR);
         }
     }
 }
