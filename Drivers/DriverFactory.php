@@ -52,11 +52,9 @@ class DriverFactory
     /**
      * Return the driver.
      *
-     * @return mixed
-     *
      * @throws \ErrorException
      */
-    public function getDriver()
+    public function getDriver(): AbstractDriver
     {
         $class = $this->driverOptions['class'];
 

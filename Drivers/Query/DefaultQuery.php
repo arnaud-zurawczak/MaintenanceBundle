@@ -2,8 +2,8 @@
 
 namespace Ady\Bundle\MaintenanceBundle\Drivers\Query;
 
-use Doctrine\ORM\EntityManager;
-use PDO;
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Default Class for handle database with a doctrine connection.
@@ -13,16 +13,16 @@ use PDO;
 class DefaultQuery extends PdoQuery
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $em;
 
     public const NAME_TABLE = 'ady_maintenance';
 
     /**
-     * @param EntityManager $em Entity Manager
+     * @param EntityManagerInterface $em Entity Manager
      */
-    public function __construct(EntityManager $em, array $options = [])
+    public function __construct(EntityManagerInterface $em, array $options = [])
     {
         $this->em = $em;
         if (empty($options['table'])) {
@@ -34,7 +34,7 @@ class DefaultQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function initDb(): PDO
+    public function initDb(): Connection
     {
         if (null === $this->db) {
             $db = $this->em->getConnection();
@@ -62,7 +62,7 @@ class DefaultQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function deleteQuery(PDO $db): bool
+    public function deleteQuery($db): bool
     {
         return $this->exec($db, sprintf('DELETE FROM %s', $this->options['table']));
     }
@@ -70,7 +70,7 @@ class DefaultQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function selectQuery(PDO $db): array
+    public function selectQuery($db): array
     {
         return $this->fetch($db, sprintf('SELECT ttl FROM %s', $this->options['table']));
     }
@@ -78,7 +78,7 @@ class DefaultQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function insertQuery(?int $ttl, PDO $db): bool
+    public function insertQuery(?int $ttl, $db): bool
     {
         return $this->exec(
             $db,

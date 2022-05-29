@@ -40,17 +40,15 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
         parent::__construct($options);
 
         if (!isset($options['key_name'])) {
-            throw new \InvalidArgumentException('$options[\'key_name\'] must be defined if Driver Memcache configuration is used');
+            throw new \InvalidArgumentException('The configuration `key_name` must be defined if MemCacheDriver is used');
         }
 
         if (!isset($options['host'])) {
-            throw new \InvalidArgumentException('$options[\'host\'] must be defined if Driver Memcache configuration is used');
+            throw new \InvalidArgumentException('The configuration `host` must be defined if MemCacheDriver is used');
         }
 
-        if (!isset($options['port'])) {
-            throw new \InvalidArgumentException('$options[\'port\'] must be defined if Driver Memcache configuration is used');
-        } elseif (!is_int($options['port'])) {
-            throw new \InvalidArgumentException('$options[\'port\'] must be an integer if Driver Memcache configuration is used');
+        if (!isset($options['port']) || !is_int($options['port'])) {
+            throw new \InvalidArgumentException('The configuration `port` must be defined and must be an integer if MemCacheDriver is used');
         }
 
         if (null !== $options) {
@@ -67,7 +65,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
      */
     protected function createLock(): bool
     {
-        return $this->memcacheInstance->set($this->keyName, self::VALUE_TO_STORE, false, (isset($this->options['ttl']) ? $this->options['ttl'] : 0));
+        return $this->memcacheInstance->set($this->keyName, self::VALUE_TO_STORE, false, $this->options['ttl'] ?? 0);
     }
 
     /**

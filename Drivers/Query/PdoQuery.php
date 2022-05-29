@@ -2,6 +2,9 @@
 
 namespace Ady\Bundle\MaintenanceBundle\Drivers\Query;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Statement;
+
 /**
  * Abstract class to handle PDO connection.
  *
@@ -10,7 +13,7 @@ namespace Ady\Bundle\MaintenanceBundle\Drivers\Query;
 abstract class PdoQuery
 {
     /**
-     * @var \PDO
+     * @var \PDO|Connection
      */
     protected $db;
 
@@ -37,40 +40,42 @@ abstract class PdoQuery
     /**
      * Result of delete query.
      *
-     * @param \PDO $db PDO instance
+     * @param \PDO|Connection $db PDO instance
      */
-    abstract public function deleteQuery(\PDO $db): bool;
+    abstract public function deleteQuery($db): bool;
 
     /**
      * Result of select query.
      *
-     * @param \PDO $db PDO instance
+     * @param \PDO|Connection $db PDO instance
      */
-    abstract public function selectQuery(\PDO $db): array;
+    abstract public function selectQuery($db): array;
 
     /**
      * Result of insert query.
      *
-     * @param ?int $ttl ttl value
-     * @param \PDO $db  PDO instance
+     * @param ?int            $ttl ttl value
+     * @param \PDO|Connection $db  PDO instance
      */
-    abstract public function insertQuery(?int $ttl, \PDO $db): bool;
+    abstract public function insertQuery(?int $ttl, $db): bool;
 
     /**
      * Initialize pdo connection.
+     *
+     * @return \PDO|Connection
      */
-    abstract public function initDb(): \PDO;
+    abstract public function initDb();
 
     /**
      * Execute sql.
      *
-     * @param \PDO   $db    PDO instance
-     * @param string $query Query
-     * @param array  $args  Arguments
+     * @param \PDO|Connection $db    PDO instance
+     * @param string          $query Query
+     * @param array           $args  Arguments
      *
      * @throws \RuntimeException
      */
-    protected function exec(\PDO $db, string $query, array $args = []): bool
+    protected function exec($db, string $query, array $args = []): bool
     {
         $stmt = $this->prepareStatement($db, $query);
 
@@ -88,12 +93,14 @@ abstract class PdoQuery
     /**
      * PrepareStatement.
      *
-     * @param \PDO   $db    PDO instance
-     * @param string $query Query
+     * @param \PDO|Connection $db    PDO instance
+     * @param string          $query Query
+     *
+     * @return \PDOStatement|Statement
      *
      * @throws \RuntimeException
      */
-    protected function prepareStatement(\PDO $db, string $query): \PDOStatement
+    protected function prepareStatement($db, string $query)
     {
         try {
             $stmt = $db->prepare($query);
@@ -111,13 +118,13 @@ abstract class PdoQuery
     /**
      * Fetch All.
      *
-     * @param \PDO   $db    PDO instance
-     * @param string $query Query
-     * @param array  $args  Arguments
+     * @param \PDO|Connection $db    PDO instance
+     * @param string          $query Query
+     * @param array           $args  Arguments
      *
      * @return array
      */
-    protected function fetch(\PDO $db, string $query, array $args = [])
+    protected function fetch($db, string $query, array $args = [])
     {
         $stmt = $this->prepareStatement($db, $query);
 
@@ -129,9 +136,11 @@ abstract class PdoQuery
     }
 
     /**
+     * @param \PDOStatement|Statement $stmt
+     *
      * @return void
      */
-    private function bindValues(\PDOStatement $stmt, array $args)
+    private function bindValues($stmt, array $args)
     {
         foreach ($args as $arg => $val) {
             $stmt->bindValue($arg, $val, is_int($val) ? \PDO::PARAM_INT : \PDO::PARAM_STR);

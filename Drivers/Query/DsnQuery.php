@@ -2,8 +2,6 @@
 
 namespace Ady\Bundle\MaintenanceBundle\Drivers\Query;
 
-use PDO;
-
 /**
  * Class for handle database with a dsn connection.
  *
@@ -14,7 +12,7 @@ class DsnQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function initDb(): PDO
+    public function initDb(): \PDO
     {
         if (null === $this->db) {
             if (!class_exists('PDO') || !in_array('mysql', \PDO::getAvailableDrivers(), true)) {
@@ -44,7 +42,7 @@ class DsnQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function deleteQuery(PDO $db): bool
+    public function deleteQuery($db): bool
     {
         return $this->exec($db, sprintf('DELETE FROM %s', $this->options['table']));
     }
@@ -52,7 +50,7 @@ class DsnQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function selectQuery(PDO $db): array
+    public function selectQuery($db): array
     {
         return $this->fetch($db, sprintf('SELECT ttl FROM %s', $this->options['table']));
     }
@@ -60,7 +58,7 @@ class DsnQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function insertQuery(?int $ttl, PDO $db): bool
+    public function insertQuery(?int $ttl, $db): bool
     {
         return $this->exec(
             $db,

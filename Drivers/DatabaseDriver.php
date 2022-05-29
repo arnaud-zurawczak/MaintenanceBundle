@@ -4,7 +4,9 @@ namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
 use Ady\Bundle\MaintenanceBundle\Drivers\Query\DefaultQuery;
 use Ady\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
+use Ady\Bundle\MaintenanceBundle\Drivers\Query\PdoQuery;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\DBAL\Connection;
 
 /**
  * Class driver for handle database.
@@ -24,12 +26,12 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     protected $options;
 
     /**
-     * @var string
+     * @var \PDO|Connection
      */
     protected $db;
 
     /**
-     * @var PdoDriver
+     * @var PdoQuery
      */
     protected $pdoDriver;
 
