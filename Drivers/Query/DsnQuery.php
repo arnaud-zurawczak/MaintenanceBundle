@@ -58,7 +58,7 @@ class DsnQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function insertQuery(?int $ttl, $db): bool
+    public function insertQuery(?string $ttl, $db): bool
     {
         return $this->exec(
             $db,

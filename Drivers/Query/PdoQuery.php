@@ -54,10 +54,10 @@ abstract class PdoQuery
     /**
      * Result of insert query.
      *
-     * @param ?int            $ttl ttl value
+     * @param ?string         $ttl ttl value
      * @param \PDO|Connection $db  PDO instance
      */
-    abstract public function insertQuery(?int $ttl, $db): bool;
+    abstract public function insertQuery(?string $ttl, $db): bool;
 
     /**
      * Initialize pdo connection.
