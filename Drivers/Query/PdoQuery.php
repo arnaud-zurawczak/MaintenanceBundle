@@ -31,8 +31,6 @@ abstract class PdoQuery
 
     /**
      * Execute create query.
-     *
-     * @return void
      */
     abstract public function createTableQuery(): void;
 
@@ -40,8 +38,6 @@ abstract class PdoQuery
      * Result of delete query.
      *
      * @param \PDO $db PDO instance
-     *
-     * @return bool
      */
     abstract public function deleteQuery(\PDO $db): bool;
 
@@ -49,25 +45,19 @@ abstract class PdoQuery
      * Result of select query.
      *
      * @param \PDO $db PDO instance
-     *
-     * @return array
      */
     abstract public function selectQuery(\PDO $db): array;
 
     /**
      * Result of insert query.
      *
-     * @param ?int  $ttl ttl value
+     * @param ?int $ttl ttl value
      * @param \PDO $db  PDO instance
-     *
-     * @return bool
      */
     abstract public function insertQuery(?int $ttl, \PDO $db): bool;
 
     /**
      * Initialize pdo connection.
-     *
-     * @return \PDO
      */
     abstract public function initDb(): \PDO;
 
@@ -77,8 +67,6 @@ abstract class PdoQuery
      * @param \PDO   $db    PDO instance
      * @param string $query Query
      * @param array  $args  Arguments
-     *
-     * @return bool
      *
      * @throws \RuntimeException
      */
@@ -102,8 +90,6 @@ abstract class PdoQuery
      *
      * @param \PDO   $db    PDO instance
      * @param string $query Query
-     *
-     * @return \PDOStatement
      *
      * @throws \RuntimeException
      */
@@ -143,8 +129,6 @@ abstract class PdoQuery
     }
 
     /**
-     * @param \PDOStatement $stmt
-     * @param array         $args
      * @return void
      */
     private function bindValues(\PDOStatement $stmt, array $args)

@@ -74,6 +74,7 @@ class DriverLockCommand extends Command
 
     /**
      * {@inheritdoc}
+     *
      * @throws \ErrorException
      */
     protected function interact(InputInterface $input, OutputInterface $output): void
@@ -135,8 +136,6 @@ class DriverLockCommand extends Command
     /**
      * Get driver.
      *
-     * @return AbstractDriver
-     *
      * @throws \ErrorException
      */
     private function getDriver(): AbstractDriver
@@ -145,9 +144,6 @@ class DriverLockCommand extends Command
     }
 
     /**
-     * @param string          $question
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      * @return mixed
      */
     protected function askConfirmation(string $question, InputInterface $input, OutputInterface $output)
@@ -157,12 +153,7 @@ class DriverLockCommand extends Command
     }
 
     /**
-     * @param InputInterface  $input
-     * @param OutputInterface $output
-     * @param string          $question
-     * @param callable        $validator
-     * @param int|null        $attempts
-     * @param mixed           $default
+     * @param mixed $default
      *
      * @return mixed
      */

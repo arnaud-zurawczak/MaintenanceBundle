@@ -17,7 +17,7 @@ class DefaultQuery extends PdoQuery
      */
     protected $em;
 
-    const NAME_TABLE = 'ady_maintenance';
+    public const NAME_TABLE = 'ady_maintenance';
 
     /**
      * @param EntityManager $em Entity Manager
@@ -34,7 +34,7 @@ class DefaultQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function initDb(): \PDO
+    public function initDb(): PDO
     {
         if (null === $this->db) {
             $db = $this->em->getConnection();

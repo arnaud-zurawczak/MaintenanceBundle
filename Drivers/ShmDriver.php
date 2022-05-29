@@ -14,14 +14,14 @@ class ShmDriver extends AbstractDriver
      *
      * @var string
      */
-    const VALUE_TO_STORE = 'maintenance';
+    public const VALUE_TO_STORE = 'maintenance';
 
     /**
      * Variable key.
      *
      * @var int
      */
-    const VARIABLE_KEY = 1;
+    public const VARIABLE_KEY = 1;
 
     /**
      * The key store in shm.

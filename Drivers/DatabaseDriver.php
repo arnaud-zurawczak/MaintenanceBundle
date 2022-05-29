@@ -71,7 +71,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
         try {
             $ttl = null;
             if (isset($this->options['ttl']) && 0 !== $this->options['ttl']) {
-                $now = new \Datetime('now');
+                $now = new \DateTime('now');
                 $ttl = $this->options['ttl'];
                 $ttl = $now->modify(sprintf('+%s seconds', $ttl))->format('Y-m-d H:i:s');
             }

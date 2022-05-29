@@ -26,7 +26,7 @@ class DriverFactory
      */
     protected $translator;
 
-    const DATABASE_DRIVER = 'Ady\Bundle\MaintenanceBundle\Drivers\DatabaseDriver';
+    public const DATABASE_DRIVER = 'Ady\Bundle\MaintenanceBundle\Drivers\DatabaseDriver';
 
     /**
      * Constructor driver factory.

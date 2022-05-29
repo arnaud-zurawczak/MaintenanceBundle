@@ -25,8 +25,6 @@ interface DriverTtlInterface
 
     /**
      * Has ttl.
-     *
-     * @return bool
      */
     public function hasTtl(): bool;
 }

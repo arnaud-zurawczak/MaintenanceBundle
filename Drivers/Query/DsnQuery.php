@@ -14,7 +14,7 @@ class DsnQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function initDb(): \PDO
+    public function initDb(): PDO
     {
         if (null === $this->db) {
             if (!class_exists('PDO') || !in_array('mysql', \PDO::getAvailableDrivers(), true)) {

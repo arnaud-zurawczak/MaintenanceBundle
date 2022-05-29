@@ -14,7 +14,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
      *
      * @var string
      */
-    const VALUE_TO_STORE = 'maintenance';
+    public const VALUE_TO_STORE = 'maintenance';
 
     /**
      * The key store in memcache.

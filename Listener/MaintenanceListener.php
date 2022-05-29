@@ -133,9 +133,6 @@ class MaintenanceListener
     }
 
     /**
-     * @param RequestEvent $event
-     * @return void
-     *
      * @throws \ErrorException
      */
     public function onKernelRequest(RequestEvent $event): void
@@ -204,9 +201,6 @@ class MaintenanceListener
 
     /**
      * Rewrites the http code of the response.
-     *
-     * @param ResponseEvent $event
-     * @return void
      */
     public function onKernelResponse(ResponseEvent $event): void
     {
@@ -221,8 +215,6 @@ class MaintenanceListener
      *
      * @param ?string      $requestedIp
      * @param string|array $ips
-     *
-     * @return bool
      */
     protected function checkIps(?string $requestedIp, $ips): bool
     {

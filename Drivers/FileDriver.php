@@ -31,7 +31,7 @@ class FileDriver extends AbstractDriver
      */
     protected function createLock(): bool
     {
-        return !!fopen($this->filePath, 'w+');
+        return (bool) fopen($this->filePath, 'w+');
     }
 
     /**
@@ -63,7 +63,6 @@ class FileDriver extends AbstractDriver
      *
      * @param int $timeTtl The ttl value
      *
-     * @return bool
      * @throws \Exception
      */
     public function isEndTime(int $timeTtl): bool

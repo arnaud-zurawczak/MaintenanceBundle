@@ -54,11 +54,6 @@ class DriverUnlockCommand extends Command
         return 0;
     }
 
-    /**
-     * @param InputInterface   $input
-     * @param OutputInterface $output
-     * @return bool
-     */
     protected function confirmUnlock(InputInterface $input, OutputInterface $output): bool
     {
         $formatter = $this->getHelperSet()->get('formatter');
@@ -88,9 +83,6 @@ class DriverUnlockCommand extends Command
     }
 
     /**
-     * @param string $question
-     * @param InputInterface   $input
-     * @param OutputInterface $output
      * @return mixed
      */
     protected function askConfirmation(string $question, InputInterface $input, OutputInterface $output)
