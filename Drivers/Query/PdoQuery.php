@@ -34,7 +34,7 @@ abstract class PdoQuery
      *
      * @return void
      */
-    abstract public function createTableQuery();
+    abstract public function createTableQuery(): void;
 
     /**
      * Result of delete query.
@@ -43,7 +43,7 @@ abstract class PdoQuery
      *
      * @return bool
      */
-    abstract public function deleteQuery($db);
+    abstract public function deleteQuery(\PDO $db): bool;
 
     /**
      * Result of select query.
@@ -52,24 +52,24 @@ abstract class PdoQuery
      *
      * @return array
      */
-    abstract public function selectQuery($db);
+    abstract public function selectQuery(\PDO $db): array;
 
     /**
      * Result of insert query.
      *
-     * @param int  $ttl ttl value
+     * @param ?int  $ttl ttl value
      * @param \PDO $db  PDO instance
      *
      * @return bool
      */
-    abstract public function insertQuery($ttl, $db);
+    abstract public function insertQuery(?int $ttl, \PDO $db): bool;
 
     /**
      * Initialize pdo connection.
      *
      * @return \PDO
      */
-    abstract public function initDb();
+    abstract public function initDb(): \PDO;
 
     /**
      * Execute sql.
@@ -82,13 +82,9 @@ abstract class PdoQuery
      *
      * @throws \RuntimeException
      */
-    protected function exec($db, $query, array $args = [])
+    protected function exec(\PDO $db, string $query, array $args = []): bool
     {
         $stmt = $this->prepareStatement($db, $query);
-
-        if (false === $stmt) {
-            throw new \RuntimeException('The database cannot successfully prepare the statement');
-        }
 
         $this->bindValues($stmt, $args);
 
@@ -107,11 +103,11 @@ abstract class PdoQuery
      * @param \PDO   $db    PDO instance
      * @param string $query Query
      *
-     * @return Statement
+     * @return \PDOStatement
      *
      * @throws \RuntimeException
      */
-    protected function prepareStatement($db, $query)
+    protected function prepareStatement(\PDO $db, string $query): \PDOStatement
     {
         try {
             $stmt = $db->prepare($query);
@@ -135,13 +131,9 @@ abstract class PdoQuery
      *
      * @return array
      */
-    protected function fetch($db, $query, array $args = [])
+    protected function fetch(\PDO $db, string $query, array $args = [])
     {
         $stmt = $this->prepareStatement($db, $query);
-
-        if (false === $stmt) {
-            throw new \RuntimeException('The database cannot successfully prepare the statement');
-        }
 
         $this->bindValues($stmt, $args);
 
@@ -151,11 +143,11 @@ abstract class PdoQuery
     }
 
     /**
-     * @param Statement $stmt
-     *
+     * @param \PDOStatement $stmt
+     * @param array         $args
      * @return void
      */
-    private function bindValues($stmt, array $args)
+    private function bindValues(\PDOStatement $stmt, array $args)
     {
         foreach ($args as $arg => $val) {
             $stmt->bindValue($arg, $val, is_int($val) ? \PDO::PARAM_INT : \PDO::PARAM_STR);

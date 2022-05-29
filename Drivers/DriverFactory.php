@@ -64,6 +64,15 @@ class DriverFactory
             throw new \ErrorException("Class '".$class."' not found in ".get_class($this));
         }
 
+        if (!\is_array($this->driverOptions['options'])) {
+            trigger_deprecation(
+                'ady/maintenance-bundle',
+                '3.0.6',
+                "The optional configuration 'driver.options' must be an array. Other types are deprecated"
+            );
+            $this->driverOptions['options'] = (array) $this->driverOptions['options'];
+        }
+
         if (self::DATABASE_DRIVER === $class) {
             $driver = $this->dbDriver;
             $driver->setOptions($this->driverOptions['options']);

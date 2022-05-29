@@ -35,7 +35,7 @@ class DriverLockCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('ady:maintenance:lock')
@@ -46,7 +46,7 @@ class DriverLockCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $driver = $this->getDriver();
 
@@ -74,8 +74,9 @@ class DriverLockCommand extends Command
 
     /**
      * {@inheritdoc}
+     * @throws \ErrorException
      */
-    protected function interact(InputInterface $input, OutputInterface $output)
+    protected function interact(InputInterface $input, OutputInterface $output): void
     {
         $driver = $this->getDriver();
         $default = $driver->getOptions();
@@ -116,7 +117,7 @@ class DriverLockCommand extends Command
                         return $value;
                     },
                     1,
-                    isset($default['ttl']) ? $default['ttl'] : 0
+                    $default['ttl'] ?? 0
                 );
             }
 
@@ -138,48 +139,41 @@ class DriverLockCommand extends Command
      *
      * @throws \ErrorException
      */
-    private function getDriver()
+    private function getDriver(): AbstractDriver
     {
         return $this->driverFactory->getDriver();
     }
 
     /**
-     * This method ensure that we stay compatible with symfony console 2.3 by using the deprecated dialog helper
-     * but use the ConfirmationQuestion when available.
-     *
-     * @param $question
-     *
+     * @param string          $question
+     * @param InputInterface  $input
+     * @param OutputInterface $output
      * @return mixed
      */
-    protected function askConfirmation($question, InputInterface $input, OutputInterface $output)
+    protected function askConfirmation(string $question, InputInterface $input, OutputInterface $output)
     {
-        if (!$this->getHelperSet()->has('question')) {
-            return $this->getHelper('dialog')
-                ->askConfirmation($output, '<question>'.$question.'</question>', 'y');
-        }
-
         return $this->getHelper('question')
             ->ask($input, $output, new ConfirmationQuestion($question));
     }
 
     /**
-     * This method ensure that we stay compatible with symfony console 2.3 by using the deprecated dialog helper
-     * but use the ConfirmationQuestion when available.
-     *
-     * @param $question
-     * @param $validator
-     * @param int  $attempts
-     * @param null $default
+     * @param InputInterface  $input
+     * @param OutputInterface $output
+     * @param string          $question
+     * @param callable        $validator
+     * @param int|null        $attempts
+     * @param mixed           $default
      *
      * @return mixed
      */
-    protected function askAndValidate(InputInterface $input, OutputInterface $output, $question, $validator, $attempts = 1, $default = null)
-    {
-        if (!$this->getHelperSet()->has('question')) {
-            return $this->getHelper('dialog')
-                ->askAndValidate($output, $question, $validator, $attempts, $default);
-        }
-
+    protected function askAndValidate(
+        InputInterface $input,
+        OutputInterface $output,
+        string $question,
+        callable $validator,
+        ?int $attempts = 1,
+        $default = null
+    ) {
         $question = new Question($question, $default);
         $question->setValidator($validator);
         $question->setMaxAttempts($attempts);

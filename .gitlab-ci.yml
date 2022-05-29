@@ -21,7 +21,7 @@ test:7.2:
     SYMFONY_DEPRECATIONS_HELPER: 'max[direct]=0'
     XDEBUG: '2.8.1'
   script:
-    - ./vendor/bin/phpunit --colors=never
+    - ./vendor/bin/phpunit --colors=never -c phpunit.old.xml
     - ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff
 
 test:7.3:
@@ -47,9 +47,9 @@ test:7.4:
 test:8.0:
   image: php:8.0
   variables:
-    SYMFONY_VERSION: '5.*'
+    SYMFONY_VERSION: '6.*'
     SYMFONY_DEPRECATIONS_HELPER: 'max[direct]=0'
     XDEBUG: '3.0.0'
   script:
-    - ./vendor/bin/phpunit --colors=never -c phpunit.php80.xml
+    - ./vendor/bin/phpunit --colors=never
     - ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff

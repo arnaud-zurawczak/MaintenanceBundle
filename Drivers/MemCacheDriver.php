@@ -65,7 +65,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    protected function createLock()
+    protected function createLock(): bool
     {
         return $this->memcacheInstance->set($this->keyName, self::VALUE_TO_STORE, false, (isset($this->options['ttl']) ? $this->options['ttl'] : 0));
     }
@@ -73,7 +73,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    protected function createUnlock()
+    protected function createUnlock(): bool
     {
         return $this->memcacheInstance->delete($this->keyName);
     }
@@ -81,19 +81,15 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function isExists()
+    public function isExists(): ?bool
     {
-        if (false !== $this->memcacheInstance->get($this->keyName)) {
-            return true;
-        } else {
-            return false;
-        }
+        return false !== $this->memcacheInstance->get($this->keyName);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getMessageLock($resultTest)
+    public function getMessageLock(bool $resultTest): string
     {
         $key = $resultTest ? 'ady_maintenance.success_lock_memc' : 'ady_maintenance.not_success_lock';
 
@@ -103,7 +99,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function getMessageUnlock($resultTest)
+    public function getMessageUnlock(bool $resultTest): string
     {
         $key = $resultTest ? 'ady_maintenance.success_unlock' : 'ady_maintenance.not_success_unlock';
 
@@ -113,7 +109,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function setTtl($value)
+    public function setTtl(?int $value): void
     {
         $this->options['ttl'] = $value;
     }
@@ -121,7 +117,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function getTtl()
+    public function getTtl(): ?int
     {
         return $this->options['ttl'];
     }
@@ -129,7 +125,7 @@ class MemCacheDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function hasTtl()
+    public function hasTtl(): bool
     {
         return isset($this->options['ttl']);
     }

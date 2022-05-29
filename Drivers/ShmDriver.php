@@ -40,12 +40,11 @@ class ShmDriver extends AbstractDriver
     /**
      * Constructor shmDriver.
      *
-     * @param Translator $translator Translator service
-     * @param array      $options    Options driver
+     * @param array $options Options driver
      */
-    public function __construct($translator, array $options = [])
+    public function __construct(array $options = [])
     {
-        parent::__construct($translator, $options);
+        parent::__construct($options);
 
         $key = ftok(__FILE__, 'm');
         $this->shmId = shm_attach($key, 100, 0666);
@@ -68,7 +67,7 @@ class ShmDriver extends AbstractDriver
     /**
      * {@inheritdoc}
      */
-    protected function createLock()
+    protected function createLock(): bool
     {
         if ($this->shmId) {
             return shm_put_var($this->shmId, self::VARIABLE_KEY, self::VALUE_TO_STORE);
@@ -80,7 +79,7 @@ class ShmDriver extends AbstractDriver
     /**
      * {@inheritdoc}
      */
-    protected function createUnlock()
+    protected function createUnlock(): bool
     {
         if ($this->shmId) {
             return shm_remove_var($this->shmId, self::VARIABLE_KEY);
@@ -92,15 +91,16 @@ class ShmDriver extends AbstractDriver
     /**
      * {@inheritdoc}
      */
-    public function isExists()
+    public function isExists(): ?bool
     {
         if ($this->shmId) {
             if (!shm_has_var($this->shmId, self::VARIABLE_KEY)) {
                 return false;
             }
+
             $data = shm_get_var($this->shmId, self::VARIABLE_KEY);
 
-            return self::VALUE_TO_STORE == $data;
+            return self::VALUE_TO_STORE === $data;
         }
 
         return false;
@@ -109,7 +109,7 @@ class ShmDriver extends AbstractDriver
     /**
      * {@inheritdoc}
      */
-    public function getMessageLock($resultTest)
+    public function getMessageLock(bool $resultTest): string
     {
         $key = $resultTest ? 'ady_maintenance.success_lock_shm' : 'ady_maintenance.not_success_lock';
 
@@ -119,7 +119,7 @@ class ShmDriver extends AbstractDriver
     /**
      * {@inheritdoc}
      */
-    public function getMessageUnlock($resultTest)
+    public function getMessageUnlock(bool $resultTest): string
     {
         $key = $resultTest ? 'ady_maintenance.success_unlock' : 'ady_maintenance.not_success_unlock';
 

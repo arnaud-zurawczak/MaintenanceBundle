@@ -2,6 +2,8 @@
 
 namespace Ady\Bundle\MaintenanceBundle\Drivers\Query;
 
+use PDO;
+
 /**
  * Class for handle database with a dsn connection.
  *
@@ -12,7 +14,7 @@ class DsnQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function initDb()
+    public function initDb(): \PDO
     {
         if (null === $this->db) {
             if (!class_exists('PDO') || !in_array('mysql', \PDO::getAvailableDrivers(), true)) {
@@ -32,7 +34,7 @@ class DsnQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function createTableQuery()
+    public function createTableQuery(): void
     {
         $type = 'mysql' != $this->db->getAttribute(\PDO::ATTR_DRIVER_NAME) ? 'timestamp' : 'datetime';
 
@@ -42,7 +44,7 @@ class DsnQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function deleteQuery($db)
+    public function deleteQuery(PDO $db): bool
     {
         return $this->exec($db, sprintf('DELETE FROM %s', $this->options['table']));
     }
@@ -50,7 +52,7 @@ class DsnQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function selectQuery($db)
+    public function selectQuery(PDO $db): array
     {
         return $this->fetch($db, sprintf('SELECT ttl FROM %s', $this->options['table']));
     }
@@ -58,7 +60,7 @@ class DsnQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function insertQuery($ttl, $db)
+    public function insertQuery(?int $ttl, PDO $db): bool
     {
         return $this->exec(
             $db,
