@@ -4,7 +4,9 @@ namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
 use Ady\Bundle\MaintenanceBundle\Drivers\Query\DefaultQuery;
 use Ady\Bundle\MaintenanceBundle\Drivers\Query\DsnQuery;
+use Ady\Bundle\MaintenanceBundle\Drivers\Query\PdoQuery;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\DBAL\Connection;
 
 /**
  * Class driver for handle database.
@@ -14,7 +16,7 @@ use Doctrine\Bundle\DoctrineBundle\Registry;
 class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
 {
     /**
-     * @var Registry
+     * @var ?Registry
      */
     protected $doctrine;
 
@@ -24,19 +26,19 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     protected $options;
 
     /**
-     * @var string
+     * @var \PDO|Connection
      */
     protected $db;
 
     /**
-     * @var PdoDriver
+     * @var PdoQuery
      */
     protected $pdoDriver;
 
     /**
      * Constructor.
      *
-     * @param Registry $doctrine The registry
+     * @param ?Registry $doctrine The registry
      */
     public function __construct(Registry $doctrine = null)
     {
@@ -48,7 +50,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
      *
      * @param array $options Options
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         $this->options = $options;
 
@@ -64,14 +66,14 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    protected function createLock()
+    protected function createLock(): bool
     {
         $db = $this->pdoDriver->initDb();
 
         try {
             $ttl = null;
             if (isset($this->options['ttl']) && 0 !== $this->options['ttl']) {
-                $now = new \Datetime('now');
+                $now = new \DateTime('now');
                 $ttl = $this->options['ttl'];
                 $ttl = $now->modify(sprintf('+%s seconds', $ttl))->format('Y-m-d H:i:s');
             }
@@ -86,7 +88,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    protected function createUnlock()
+    protected function createUnlock(): bool
     {
         $db = $this->pdoDriver->initDb();
 
@@ -101,14 +103,16 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @throws \Exception
      */
-    public function isExists()
+    public function isExists(): bool
     {
         $db = $this->pdoDriver->initDb();
         $data = $this->pdoDriver->selectQuery($db);
 
-        if (!$data) {
-            return null;
+        if ([] === $data) {
+            return false;
         }
 
         if (null !== $data[0]['ttl']) {
@@ -126,7 +130,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function getMessageLock($resultTest)
+    public function getMessageLock(bool $resultTest): string
     {
         $key = $resultTest ? 'ady_maintenance.success_lock_database' : 'ady_maintenance.not_success_lock';
 
@@ -136,7 +140,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritDoc}
      */
-    public function getMessageUnlock($resultTest)
+    public function getMessageUnlock(bool $resultTest): string
     {
         $key = $resultTest ? 'ady_maintenance.success_unlock' : 'ady_maintenance.not_success_unlock';
 
@@ -146,7 +150,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function setTtl($value)
+    public function setTtl(?int $value): void
     {
         $this->options['ttl'] = $value;
     }
@@ -154,7 +158,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function getTtl()
+    public function getTtl(): ?int
     {
         return $this->options['ttl'];
     }
@@ -162,7 +166,7 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
     /**
      * {@inheritdoc}
      */
-    public function hasTtl()
+    public function hasTtl(): bool
     {
         return isset($this->options['ttl']);
     }

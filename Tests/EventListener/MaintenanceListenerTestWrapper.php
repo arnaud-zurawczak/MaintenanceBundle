@@ -8,10 +8,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 
 class MaintenanceListenerTestWrapper extends MaintenanceListener
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function onKernelRequest(RequestEvent $event)
+    public function runOnKernelRequestMethod(RequestEvent $event): bool
     {
         try {
             parent::onKernelRequest($event);

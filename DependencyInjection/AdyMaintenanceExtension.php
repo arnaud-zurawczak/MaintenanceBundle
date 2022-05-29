@@ -20,7 +20,7 @@ class AdyMaintenanceExtension extends Extension
     /**
      * {@inheritDoc}
      */
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
@@ -57,7 +57,7 @@ class AdyMaintenanceExtension extends Extension
      *
      * @throws InvalidArgumentException
      */
-    protected function registerDsnConfiguration($options)
+    protected function registerDsnConfiguration(array $options): void
     {
         if (!isset($options['table'])) {
             throw new InvalidArgumentException('You need to define table for dsn use');

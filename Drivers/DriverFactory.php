@@ -26,7 +26,7 @@ class DriverFactory
      */
     protected $translator;
 
-    const DATABASE_DRIVER = 'Ady\Bundle\MaintenanceBundle\Drivers\DatabaseDriver';
+    public const DATABASE_DRIVER = 'Ady\Bundle\MaintenanceBundle\Drivers\DatabaseDriver';
 
     /**
      * Constructor driver factory.
@@ -52,16 +52,23 @@ class DriverFactory
     /**
      * Return the driver.
      *
-     * @return mixed
-     *
      * @throws \ErrorException
      */
-    public function getDriver()
+    public function getDriver(): AbstractDriver
     {
         $class = $this->driverOptions['class'];
 
         if (!class_exists($class)) {
             throw new \ErrorException("Class '".$class."' not found in ".get_class($this));
+        }
+
+        if (!\is_array($this->driverOptions['options'])) {
+            trigger_deprecation(
+                'ady/maintenance-bundle',
+                '3.0.6',
+                "The optional configuration 'driver.options' must be an array. Other types are deprecated"
+            );
+            $this->driverOptions['options'] = (array) $this->driverOptions['options'];
         }
 
         if (self::DATABASE_DRIVER === $class) {

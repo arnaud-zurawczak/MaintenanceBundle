@@ -4,6 +4,9 @@ namespace Ady\Bundle\MaintenanceBundle\Drivers;
 
 class FileDriver extends AbstractDriver
 {
+    /**
+     * @var string
+     */
     protected $filePath;
 
     /**
@@ -16,27 +19,25 @@ class FileDriver extends AbstractDriver
         parent::__construct($options);
 
         if (!isset($options['file_path'])) {
-            throw new \InvalidArgumentException('$options[\'file_path\'] cannot be defined if Driver File configuration is used');
-        }
-        if (null !== $options) {
-            $this->filePath = $options['file_path'];
+            throw new \InvalidArgumentException('The configuration `file_path` must be defined if FileDriver is used');
         }
 
+        $this->filePath = $options['file_path'];
         $this->options = $options;
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function createLock()
+    protected function createLock(): bool
     {
-        return fopen($this->filePath, 'w+');
+        return (bool) fopen($this->filePath, 'w+');
     }
 
     /**
      * {@inheritDoc}
      */
-    protected function createUnlock()
+    protected function createUnlock(): bool
     {
         return @unlink($this->filePath);
     }
@@ -44,7 +45,7 @@ class FileDriver extends AbstractDriver
     /**
      * {@inheritDoc}
      */
-    public function isExists()
+    public function isExists(): bool
     {
         if (file_exists($this->filePath)) {
             if (isset($this->options['ttl']) && is_numeric($this->options['ttl'])) {
@@ -52,9 +53,9 @@ class FileDriver extends AbstractDriver
             }
 
             return true;
-        } else {
-            return false;
         }
+
+        return false;
     }
 
     /**
@@ -62,26 +63,27 @@ class FileDriver extends AbstractDriver
      *
      * @param int $timeTtl The ttl value
      *
-     * @return bool
+     * @throws \Exception
      */
-    public function isEndTime($timeTtl)
+    public function isEndTime(int $timeTtl): bool
     {
         $now = new \DateTime('now');
-        $accessTime = date('Y-m-d H:i:s.', filemtime($this->filePath));
-        $accessTime = new \DateTime($accessTime);
-        $accessTime->modify(sprintf('+%s seconds', $timeTtl));
+        $fileTime = filemtime($this->filePath) ?: 0;
+        $accessTime = new \DateTime();
+        $accessTime->setTimestamp($fileTime);
+        $accessTime->modify(sprintf('+%1$d seconds', $timeTtl));
 
         if ($accessTime < $now) {
             return $this->createUnlock();
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function getMessageLock($resultTest)
+    public function getMessageLock(bool $resultTest): string
     {
         $key = $resultTest ? 'ady_maintenance.success_lock_file' : 'ady_maintenance.not_success_lock';
 
@@ -91,7 +93,7 @@ class FileDriver extends AbstractDriver
     /**
      * {@inheritDoc}
      */
-    public function getMessageUnlock($resultTest)
+    public function getMessageUnlock(bool $resultTest): string
     {
         $key = $resultTest ? 'ady_maintenance.success_unlock' : 'ady_maintenance.not_success_unlock';
 

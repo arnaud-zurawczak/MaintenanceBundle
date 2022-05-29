@@ -29,7 +29,7 @@ class DriverUnlockCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('ady:maintenance:unlock')
@@ -39,7 +39,7 @@ class DriverUnlockCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$this->confirmUnlock($input, $output)) {
             return 1;
@@ -54,10 +54,7 @@ class DriverUnlockCommand extends Command
         return 0;
     }
 
-    /**
-     * @return bool
-     */
-    protected function confirmUnlock(InputInterface $input, OutputInterface $output)
+    protected function confirmUnlock(InputInterface $input, OutputInterface $output): bool
     {
         $formatter = $this->getHelperSet()->get('formatter');
 
@@ -86,20 +83,10 @@ class DriverUnlockCommand extends Command
     }
 
     /**
-     * This method ensure that we stay compatible with symfony console 2.3 by using the deprecated dialog helper
-     * but use the ConfirmationQuestion when available.
-     *
-     * @param $question
-     *
      * @return mixed
      */
-    protected function askConfirmation($question, InputInterface $input, OutputInterface $output)
+    protected function askConfirmation(string $question, InputInterface $input, OutputInterface $output)
     {
-        if (!$this->getHelperSet()->has('question')) {
-            return $this->getHelper('dialog')
-                ->askConfirmation($output, '<question>'.$question.'</question>', 'y');
-        }
-
         return $this->getHelper('question')
             ->ask($input, $output, new ConfirmationQuestion($question));
     }

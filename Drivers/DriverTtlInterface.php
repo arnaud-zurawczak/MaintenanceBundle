@@ -12,21 +12,19 @@ interface DriverTtlInterface
     /**
      * Set time to life for overwrite basic configuration.
      *
-     * @param int $value ttl value
+     * @param ?int $value ttl value
      */
-    public function setTtl($value);
+    public function setTtl(?int $value): void;
 
     /**
      * Return time to life.
      *
-     * @return int
+     * @return ?int
      */
-    public function getTtl();
+    public function getTtl(): ?int;
 
     /**
      * Has ttl.
-     *
-     * @return bool
      */
-    public function hasTtl();
+    public function hasTtl(): bool;
 }

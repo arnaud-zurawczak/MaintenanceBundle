@@ -1,9 +1,0 @@
-version: "3"
-services:
-  php:
-    build: ./
-    volumes:
-      - ${PWD}/:/app
-      - ${HOME}/.composer/:/root/.composer/
-    restart: always
-    tty: true

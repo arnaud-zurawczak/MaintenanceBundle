@@ -2,7 +2,8 @@
 
 namespace Ady\Bundle\MaintenanceBundle\Drivers\Query;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\Connection;
+use Doctrine\ORM\EntityManagerInterface;
 
 /**
  * Default Class for handle database with a doctrine connection.
@@ -12,16 +13,16 @@ use Doctrine\ORM\EntityManager;
 class DefaultQuery extends PdoQuery
 {
     /**
-     * @var EntityManager
+     * @var EntityManagerInterface
      */
     protected $em;
 
-    const NAME_TABLE = 'ady_maintenance';
+    public const NAME_TABLE = 'ady_maintenance';
 
     /**
-     * @param EntityManager $em Entity Manager
+     * @param EntityManagerInterface $em Entity Manager
      */
-    public function __construct(EntityManager $em, array $options = [])
+    public function __construct(EntityManagerInterface $em, array $options = [])
     {
         $this->em = $em;
         if (empty($options['table'])) {
@@ -33,7 +34,7 @@ class DefaultQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function initDb()
+    public function initDb(): Connection
     {
         if (null === $this->db) {
             $db = $this->em->getConnection();
@@ -49,7 +50,7 @@ class DefaultQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function createTableQuery()
+    public function createTableQuery(): void
     {
         $type = 'mysql' != $this->em->getConnection()->getDatabasePlatform()->getName() ? 'timestamp' : 'datetime';
 
@@ -61,7 +62,7 @@ class DefaultQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function deleteQuery($db)
+    public function deleteQuery($db): bool
     {
         return $this->exec($db, sprintf('DELETE FROM %s', $this->options['table']));
     }
@@ -69,7 +70,7 @@ class DefaultQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function selectQuery($db)
+    public function selectQuery($db): array
     {
         return $this->fetch($db, sprintf('SELECT ttl FROM %s', $this->options['table']));
     }
@@ -77,7 +78,7 @@ class DefaultQuery extends PdoQuery
     /**
      * {@inheritdoc}
      */
-    public function insertQuery($ttl, $db)
+    public function insertQuery(?string $ttl, $db): bool
     {
         return $this->exec(
             $db,

@@ -133,11 +133,9 @@ class MaintenanceListener
     }
 
     /**
-     * @return void
-     *
-     * @throws ServiceUnavailableException
+     * @throws \ErrorException
      */
-    public function onKernelRequest(RequestEvent $event)
+    public function onKernelRequest(RequestEvent $event): void
     {
         if (method_exists($event, 'isMainRequest')) {
             if (!$event->isMainRequest()) {
@@ -203,10 +201,8 @@ class MaintenanceListener
 
     /**
      * Rewrites the http code of the response.
-     *
-     * @return void
      */
-    public function onKernelResponse(ResponseEvent $event)
+    public function onKernelResponse(ResponseEvent $event): void
     {
         if ($this->handleResponse && null !== $this->http_code) {
             $response = $event->getResponse();
@@ -217,12 +213,10 @@ class MaintenanceListener
     /**
      * Checks if the requested ip is valid.
      *
-     * @param string       $requestedIp
+     * @param ?string      $requestedIp
      * @param string|array $ips
-     *
-     * @return bool
      */
-    protected function checkIps($requestedIp, $ips)
+    protected function checkIps(?string $requestedIp, $ips): bool
     {
         $ips = (array) $ips;
 

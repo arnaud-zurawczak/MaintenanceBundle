@@ -3,8 +3,8 @@ docker/ export-ignore
 Tests/ export-ignore
 .gitattributes export-ignore
 .gitlab-ci.yml export-ignore
-.php-cs-fixer.dist.php export-ignore
-docker-compose.yaml.dist export-ignore
+.php-cs-fixer.php export-ignore
+docker-compose.yaml export-ignore
 Dockerfile export-ignore
-phpunit.xml.dist export-ignore
-phpunit.php80.xml export-ignore
+phpunit.xml export-ignore
+phpunit.old.xml export-ignore
