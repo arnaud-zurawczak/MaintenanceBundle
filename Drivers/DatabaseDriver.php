@@ -103,14 +103,15 @@ class DatabaseDriver extends AbstractDriver implements DriverTtlInterface
 
     /**
      * {@inheritdoc}
+     * @throws \Exception
      */
-    public function isExists(): ?bool
+    public function isExists(): bool
     {
         $db = $this->pdoDriver->initDb();
         $data = $this->pdoDriver->selectQuery($db);
 
-        if (!$data) {
-            return null;
+        if ([] !== $data) {
+            return true;
         }
 
         if (null !== $data[0]['ttl']) {

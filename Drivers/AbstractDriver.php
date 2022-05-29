@@ -34,9 +34,9 @@ abstract class AbstractDriver
     /**
      * Test if object exists.
      *
-     * @return ?bool
+     * @return bool
      */
-    abstract public function isExists(): ?bool;
+    abstract public function isExists(): bool;
 
     /**
      * Result of creation of lock.
