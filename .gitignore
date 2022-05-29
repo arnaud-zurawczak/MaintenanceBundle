@@ -8,5 +8,5 @@ composer.lock
 .gitlab-ci-local
 coverage
 .phpunit.result.cache
-docker-compose.yaml
+docker-compose.override.yaml
 /.php-cs-fixer.cache

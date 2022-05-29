@@ -1,0 +1,32 @@
+version: "3.4"
+services:
+  php72:
+    build:
+      context: ./docker
+      target: php72
+      args:
+        - XDEBUG_VERSION=2.8.1
+    volumes:
+      - ${PWD}/:/app
+    restart: always
+    tty: true
+  php74:
+    build:
+      context: ./docker
+      target: php74
+      args:
+        - XDEBUG_VERSION=2.8.1
+    volumes:
+      - ${PWD}/:/app
+    restart: always
+    tty: true
+  php80:
+    build:
+      context: ./docker
+      target: php80
+      args:
+        - XDEBUG_VERSION=3.0.0
+    volumes:
+      - ${PWD}/:/app
+    restart: always
+    tty: true
