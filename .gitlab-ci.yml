@@ -20,6 +20,7 @@ test:7.2:
     SYMFONY_VERSION: '4.*'
     SYMFONY_DEPRECATIONS_HELPER: 'disabled'
     XDEBUG: '2.8.1'
+  coverage: '/^\s*Lines:\s*\d+.\d+\%/'
   script:
     - ./vendor/bin/phpunit --colors=never -c phpunit.old.xml
     - ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff
@@ -30,6 +31,7 @@ test:7.3:
     SYMFONY_VERSION: '5.*'
     SYMFONY_DEPRECATIONS_HELPER: 'disabled'
     XDEBUG: '2.8.1'
+  coverage: '/^\s*Lines:\s*\d+.\d+\%/'
   script:
     - ./vendor/bin/phpunit --colors=never
     - ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff
@@ -40,6 +42,7 @@ test:7.4:
     SYMFONY_VERSION: '5.*'
     SYMFONY_DEPRECATIONS_HELPER: 'disabled'
     XDEBUG: '2.8.1'
+  coverage: '/^\s*Lines:\s*\d+.\d+\%/'
   script:
     - ./vendor/bin/phpunit --colors=never
     - ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff
@@ -50,6 +53,7 @@ test:8.0:
     SYMFONY_VERSION: '6.*'
     SYMFONY_DEPRECATIONS_HELPER: 'disabled'
     XDEBUG: '3.0.0'
+  coverage: '/^\s*Lines:\s*\d+.\d+\%/'
   script:
     - ./vendor/bin/phpunit --colors=never
     - ./vendor/bin/php-cs-fixer fix --dry-run --stop-on-violation --diff

@@ -18,10 +18,10 @@ Several choices of maintenance mode are possible: a simple test of an existing f
 
 Original LexikMaintenanceBundle is no longer maintained, this fork has the ambition to support new Symfony and PHP versions.
 
-| Support | Version     |
-| ------- | ------------|
-| Symfony | ^4.0 / ^5.0 |
-| PHP     | ^7.2 / ^8.0 |
+| Support |       Version      |
+| ------- | -------------------|
+| Symfony | ^4.4 / ^5.4 / ^6.0 |
+| PHP     | ^7.2 / ^8.0        |
 
 ---------------------
 
