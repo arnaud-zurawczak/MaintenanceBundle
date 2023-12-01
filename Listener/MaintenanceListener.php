@@ -151,7 +151,7 @@ class MaintenanceListener
 
         if (is_array($this->query)) {
             foreach ($this->query as $key => $pattern) {
-                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->get($key))) {
+                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->get($key, ''))) {
                     return;
                 }
             }
@@ -159,7 +159,7 @@ class MaintenanceListener
 
         if (is_array($this->cookie)) {
             foreach ($this->cookie as $key => $pattern) {
-                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->cookies->get($key))) {
+                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->cookies->get($key, ''))) {
                     return;
                 }
             }
@@ -167,7 +167,7 @@ class MaintenanceListener
 
         if (is_array($this->attributes)) {
             foreach ($this->attributes as $key => $pattern) {
-                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->attributes->get($key))) {
+                if (!empty($pattern) && preg_match('{'.$pattern.'}', $request->attributes->get($key, ''))) {
                     return;
                 }
             }
@@ -185,7 +185,7 @@ class MaintenanceListener
             return;
         }
 
-        $route = $request->get('_route');
+        $route = $request->get('_route', '');
         if (null !== $this->route && preg_match('{'.$this->route.'}', $route) || ($this->debug && '_' === $route[0])) {
             return;
         }
